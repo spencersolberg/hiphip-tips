@@ -32,6 +32,7 @@ export default function QRCode(props: { symbol: string, address: string, color: 
           color
         },
         image: imageUrl,
+        margin: 10
       });
 
       const raw = await qrCode.getRawData("svg");
@@ -51,6 +52,6 @@ export default function QRCode(props: { symbol: string, address: string, color: 
   }, []);
 
   return (
-    <img src={qr} class="w-80 rounded-md"/>
+    <img src={qr} class="w-80 rounded-lg"/>
   )
 }

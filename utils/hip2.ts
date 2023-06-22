@@ -12,6 +12,10 @@ export const getSymbols = async (name: string): Promise<string[]> => {
     // @ts-ignore: Deno is missing the client option in fetch
     const res = await fetch(url, { client });
     const text = await res.text();
+    // if text has characters other than a-Z, 0-9, and $, return []
+    if (!/^[a-zA-Z0-9,$]+$/.test(text)) {
+      return [];
+    }
     const symbols = text.trim().toUpperCase().split(",");
 
     return symbols;
@@ -31,7 +35,12 @@ export const getAddress = async (
   try {
     // @ts-ignore: Deno is missing the client option in fetch
     const res = await fetch(url, { client });
+    // if 404, return undefined
+    if (res.status === 404) {
+      return undefined;
+    }
     const text = await res.text();
+
     const address = text.trim();
 
     return address;

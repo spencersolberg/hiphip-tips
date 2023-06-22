@@ -2,25 +2,31 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/[domain].tsx";
-import * as $1 from "./routes/[domain]/[symbol].tsx";
-import * as $2 from "./routes/api/joke.ts";
-import * as $3 from "./routes/api/v1/[domain]/[symbol]/qr.ts";
-import * as $4 from "./routes/index.tsx";
-import * as $$0 from "./islands/Counter.tsx";
-import * as $$1 from "./islands/QRCode.tsx";
+import * as $0 from "./routes/.well-known/wallets.ts";
+import * as $1 from "./routes/[domain].tsx";
+import * as $2 from "./routes/[domain]/[symbol].tsx";
+import * as $3 from "./routes/api/joke.ts";
+import * as $4 from "./routes/api/v1/[domain]/[symbol]/qr.ts";
+import * as $5 from "./routes/index.tsx";
+import * as $$0 from "./islands/Address.tsx";
+import * as $$1 from "./islands/CoinInput.tsx";
+import * as $$2 from "./islands/Counter.tsx";
+import * as $$3 from "./islands/QRCode.tsx";
 
 const manifest = {
   routes: {
-    "./routes/[domain].tsx": $0,
-    "./routes/[domain]/[symbol].tsx": $1,
-    "./routes/api/joke.ts": $2,
-    "./routes/api/v1/[domain]/[symbol]/qr.ts": $3,
-    "./routes/index.tsx": $4,
+    "./routes/.well-known/wallets.ts": $0,
+    "./routes/[domain].tsx": $1,
+    "./routes/[domain]/[symbol].tsx": $2,
+    "./routes/api/joke.ts": $3,
+    "./routes/api/v1/[domain]/[symbol]/qr.ts": $4,
+    "./routes/index.tsx": $5,
   },
   islands: {
-    "./islands/Counter.tsx": $$0,
-    "./islands/QRCode.tsx": $$1,
+    "./islands/Address.tsx": $$0,
+    "./islands/CoinInput.tsx": $$1,
+    "./islands/Counter.tsx": $$2,
+    "./islands/QRCode.tsx": $$3,
   },
   baseUrl: import.meta.url,
 };
