@@ -6,8 +6,13 @@ import * as $0 from "./routes/.well-known/wallets.ts";
 import * as $1 from "./routes/[domain].tsx";
 import * as $2 from "./routes/[domain]/[symbol].tsx";
 import * as $3 from "./routes/api/joke.ts";
-import * as $4 from "./routes/api/v1/[domain]/[symbol]/qr.ts";
-import * as $5 from "./routes/index.tsx";
+import * as $4 from "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts";
+import * as $5 from "./routes/api/v1/subdomains.ts";
+import * as $6 from "./routes/api/v1/subdomains/[subdomain].ts";
+import * as $7 from "./routes/api/v1/subdomains/[subdomain]/wallets.ts";
+import * as $8 from "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts";
+import * as $9 from "./routes/index.tsx";
+import * as $10 from "./routes/signup.tsx";
 import * as $$0 from "./islands/Address.tsx";
 import * as $$1 from "./islands/CoinInput.tsx";
 import * as $$2 from "./islands/Counter.tsx";
@@ -19,8 +24,13 @@ const manifest = {
     "./routes/[domain].tsx": $1,
     "./routes/[domain]/[symbol].tsx": $2,
     "./routes/api/joke.ts": $3,
-    "./routes/api/v1/[domain]/[symbol]/qr.ts": $4,
-    "./routes/index.tsx": $5,
+    "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts": $4,
+    "./routes/api/v1/subdomains.ts": $5,
+    "./routes/api/v1/subdomains/[subdomain].ts": $6,
+    "./routes/api/v1/subdomains/[subdomain]/wallets.ts": $7,
+    "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts": $8,
+    "./routes/index.tsx": $9,
+    "./routes/signup.tsx": $10,
   },
   islands: {
     "./islands/Address.tsx": $$0,

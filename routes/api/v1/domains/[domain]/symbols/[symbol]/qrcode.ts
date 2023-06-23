@@ -1,7 +1,7 @@
 import { imageSync } from "qr_image_color";
 
-import { constructURL, getColor } from "../../../../../utils/coins.ts";
-import { getAddress } from "../../../../../utils/hip2.ts";
+import { constructURL, getColor } from "../../../../../../../utils/coins.ts";
+import { getAddress } from "../../../../../../../utils/hip2.ts";
 
 import { HandlerContext } from "$fresh/server.ts";
 

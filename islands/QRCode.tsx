@@ -6,7 +6,7 @@ export default function QRCode(props: { symbol: string, address: string, color: 
   const { symbol, address, color, domain } = props;
   const url = constructURL(symbol, address);
 
-  const [qr, setQR] = useState<string>(`/api/v1/${domain}/${symbol}/qr`);
+  const [qr, setQR] = useState<string>(`/api/v1/domains/${domain}/symbols/${symbol}/qrcode`);
 
   useEffect(() => {
     (async () => {
