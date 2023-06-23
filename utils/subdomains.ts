@@ -1,3 +1,13 @@
+export interface Subdomain {
+  key: string;
+  wallets: Wallet[];
+}
+
+interface Wallet {
+  symbol: string;
+  address: string;
+}
+
 export const createSubdomain = async (subdomain: string): Promise<string> => {
   if (typeof subdomain !== "string") {
     throw new Error("Subdomain must be a string.");
@@ -31,4 +41,34 @@ export const createSubdomain = async (subdomain: string): Promise<string> => {
   );
 
   return key;
+}
+
+export const deleteSubdomain = async (subdomain: string, key: string): Promise<void> => {
+  if (typeof subdomain !== "string") {
+    throw new Error("Subdomain must be a string.");
+  }
+
+  // if subdomain has characters except a-Z, 0-9, and - throw error
+  if (!subdomain.match(/^[a-z0-9-]+$/)) {
+    throw new Error("Subdomain must only contain lowercase letters, numbers, and hyphens.");
+  }
+
+  // if subdomain is longer than 63 characters throw error
+  if (subdomain.length > 63) {
+    throw new Error("Subdomain must be less than 63 characters.");
+  }
+
+  // if subdomain does not exist throw error
+  const kv = await Deno.openKv();
+  const res = await kv.get<Subdomain>(["subdomains", subdomain]);
+  if (!res.value) {
+    throw new Error("Subdomain does not exist.");
+  }
+
+  // if key is incorrect throw error
+  if (res.value.key !== key) {
+    throw new Error("Key is incorrect.");
+  }
+
+  await kv.delete(["subdomains", subdomain]);
 }

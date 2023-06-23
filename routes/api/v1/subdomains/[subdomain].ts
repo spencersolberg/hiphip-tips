@@ -1,4 +1,5 @@
 import { HandlerContext } from "$fresh/server.ts";
+import type { Subdomain } from "../../../../utils/subdomains.ts";
 
 
 export const handler = async (req: Request, ctx: HandlerContext): Promise<Response> => {
@@ -30,13 +31,12 @@ export const handler = async (req: Request, ctx: HandlerContext): Promise<Respon
   const kv = await Deno.openKv();
 
   // if subdomain doesn't exist then return 404
-  const res = await kv.get(["subdomains", subdomain]);
+  const res = await kv.get<Subdomain>(["subdomains", subdomain]);
   if (!res.value) {
     return new Response("Not found.", { status: 404 });
   }
 
   // if key is incorrect then return 401
-  // @ts-ignore
   if (res.value.key !== key) {
     return new Response("Unauthorized. Incorrect key.", { status: 401 });
   }
