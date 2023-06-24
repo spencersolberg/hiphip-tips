@@ -5,7 +5,12 @@ const client = Deno.createHttpClient({
 });
 
 export const getSymbols = async (name: string): Promise<string[]> => {
-  const url = `https://${name}/.well-known/wallets`;
+  let protocol = "https";
+
+  if (name === "localhost:8000" || name.endsWith(".localhost:8000")) {
+    protocol = "http";
+  }
+  const url = `${protocol}://${name}/.well-known/wallets`;
 
   try {
     const res = await fetch(url, { client });
@@ -28,7 +33,11 @@ export const getAddress = async (
   name: string,
   symbol: string,
 ): Promise<string | undefined> => {
-  const url = `https://${name}/.well-known/wallets/${symbol}`;
+  let protocol = "https";
+  if (name === "localhost:8000" || name.endsWith(".localhost:8000")) {
+    protocol = "http";
+  }
+  const url = `${protocol}://${name}/.well-known/wallets/${symbol}`;
 
   try {
     const res = await fetch(url, { client });
