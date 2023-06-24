@@ -19,9 +19,11 @@ export const handler: Handlers = {
     if (key) {
       try {
         const subdomain = await getSubdomain(key);
+        const reqURL = new URL(req.url);
+        const domain = reqURL.hostname;
         const headers = new Headers();
         headers.set("Location", `/`);
-        headers.set("Set-Cookie", `key=${key}; Path=/; HttpOnly; Secure; SameSite=Strict; Domain=localhost`);
+        headers.set("Set-Cookie", `key=${key}; Path=/; HttpOnly; Secure; SameSite=Strict; Domain=.${domain};`);
         return new Response(null, {
           status: 303,
           headers,
