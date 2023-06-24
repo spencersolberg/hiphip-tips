@@ -1,4 +1,6 @@
 import { Options } from "$fresh/plugins/twind.ts";
+import { IS_BROWSER } from "$fresh/runtime.ts";
+
 
 const convertToBase64 = (file: Uint8Array): string => {
   let binary = "";
@@ -9,7 +11,7 @@ const convertToBase64 = (file: Uint8Array): string => {
 
   return btoa(binary);
 }
-const fontFile = await Deno.readFile("./static/FluroBold.woff");
+const fontFile = IS_BROWSER ? new Uint8Array() : await Deno.readFile("./static/FluroBold.woff");
 
 export default {
   selfURL: import.meta.url,
