@@ -3,7 +3,7 @@
 ### Usage
 
 ```bash
-git clone https://github.com/spencersolberg/hiphiptips.git
+git clone https://github.com/spencersolberg/hiphip-tips.git
 cd hiphiptips
 letsdane -o letsdane.crt
 hnsd -p 4

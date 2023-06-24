@@ -58,11 +58,19 @@ export const handler: Handlers<WalletData> = {
 
 export default function Name({ data }: PageProps<WalletData>) {
 
+  const twitterDescription = `Send ${data.coin} (${data.symbol}) to ${data.domain}/`;
+
   return (
     <>
       <Head>
-        <title>hiphiptips - {data.domain} - {data.symbol}</title>
+        <title>{data.symbol} | {data.domain} | hiphiptips</title>
         <Style />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:url" content={`/${data.domain}/${data.symbol}`} />
+        <meta name="twitter:title" content={`${data.symbol} | ${data.domain}/ | hiphiptips`} />
+        <meta name="twitter:description" content={twitterDescription} />
+        <meta name="twitter:image" content={`/api/v1/domains/${data.domain}/symbols/${data.symbol}/qrcode`} />
+        <meta content="#34D399" name="theme-color" />
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header subdomain={data.subdomain} />

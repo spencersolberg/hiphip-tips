@@ -69,11 +69,23 @@ export default function Name({ data }: PageProps<DomainData | null>) {
 
   const { subdomain } = data;
 
+  const descriptionCurrencies = data.coins.length > 1 
+  ? data.coins[0].symbol + ", " + data.coins[1].symbol
+  : data.coins.length === 1 ? data.coins[0].symbol : "crypto" 
+
+  const twitterDescription = `Send ${descriptionCurrencies} to ${data.domain}/`
+
   return (
     <>
     <Head>
-      <title>hiphiptips - {data.domain}</title>
+      <title>{data.domain} | hiphiptips</title>
       <Style />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:url" content={`/${data.domain}`} />
+      <meta name="twitter:title" content={`${data.domain}/ | hiphiptips`} />
+      <meta name="twitter:description" content={twitterDescription} />
+      <meta name="twitter:image" content="/favicon/apple-icon.png" />
+      <meta content="#34D399" name="theme-color" />
     </Head>
     <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
       <Header subdomain={subdomain} />

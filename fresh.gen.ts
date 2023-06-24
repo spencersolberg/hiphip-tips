@@ -14,7 +14,7 @@ import * as $8 from "./routes/api/v1/subdomains/[subdomain]/wallets.ts";
 import * as $9 from "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts";
 import * as $10 from "./routes/index.tsx";
 import * as $11 from "./routes/login.tsx";
-import * as $12 from "./routes/logout.tsx";
+import * as $12 from "./routes/logout.ts";
 import * as $13 from "./routes/signup.tsx";
 import * as $14 from "./routes/subdomain.tsx";
 import * as $$0 from "./islands/Address.tsx";
@@ -37,7 +37,7 @@ const manifest = {
     "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts": $9,
     "./routes/index.tsx": $10,
     "./routes/login.tsx": $11,
-    "./routes/logout.tsx": $12,
+    "./routes/logout.ts": $12,
     "./routes/signup.tsx": $13,
     "./routes/subdomain.tsx": $14,
   },
