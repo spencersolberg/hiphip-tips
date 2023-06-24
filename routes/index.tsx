@@ -1,10 +1,30 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
+import Header from "../components/Header.tsx";
 
-import { Handlers } from "$fresh/server.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
+import { getSubdomain } from "../utils/subdomains.ts";
+
+interface Data {
+  subdomain?: string;
+}
 
 export const handler: Handlers = {
-  async GET(_, ctx) {
+  async GET(req, ctx) {
+    // get key from cookie
+    const headers = req.headers;
+    const cookie = headers.get("cookie");
+    const key = cookie?.split("key=")[1]?.split(";")[0];
+
+    // if key exists, get subdomain
+    if (key) {
+      try {
+        const subdomain = await getSubdomain(key);
+        return ctx.render({ subdomain });
+      } catch (error) {
+        return ctx.render();
+      }
+    }
     return await ctx.render();
   },
   async POST(req, ctx) {
@@ -22,21 +42,16 @@ export const handler: Handlers = {
   },
 };
 
-export default function Home() {
+export default function Home({ data }: PageProps<Data>) {
+  const { subdomain } = data ?? {};
   return (
     <>
       <Head>
         <title>hiphiptips</title>
         <Style />
       </Head>
-      <div class="p-4 mx-auto max-w-screen-md flex flex-col text-white">
-        <div class="flex mt-16">
-          {/* <a href="http://about.hiphiptips:8000/" class="text-2xl font-bold mx-auto">About</a> */}
-          <h1 class="text-6xl md:text-8xl dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
-            hiphiptips
-          </h1>
-          {/* <a href="http://login.hiphiptips/" class="text-2xl font-bold mx-auto">Login</a> */}
-        </div>
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+        <Header subdomain={subdomain} />
         <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
           <input
             class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black text-black"

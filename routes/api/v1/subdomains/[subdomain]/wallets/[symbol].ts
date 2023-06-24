@@ -1,4 +1,5 @@
 import { HandlerContext } from "$fresh/server.ts";
+import type { Subdomain } from "../../../../../../utils/subdomains.ts";
 
 
 export const handler = async (req: Request, ctx: HandlerContext): Promise<Response> => {
@@ -30,20 +31,18 @@ export const handler = async (req: Request, ctx: HandlerContext): Promise<Respon
   const kv = await Deno.openKv();
 
   // if subdomain doesn't exist then return 404
-  const res = await kv.get(["subdomains", subdomain]);
+  const res = await kv.get<Subdomain>(["subdomains", subdomain]);
   if (!res.value) {
     return new Response("Not found.", { status: 404 });
   }
 
   // if key is incorrect then return 401
-  // @ts-ignore
   if (res.value.key !== key) {
     return new Response("Unauthorized. Incorrect key.", { status: 401 });
   }
 
   // if symbol doesn't exist then return 404
   // subdomain structure: { key: string, wallets: { symbol: string, address: string }[] }
-  // @ts-ignore
   const wallets = res.value.wallets;
   const wallet = wallets.find((w: { symbol: string }) => w.symbol === symbol.toUpperCase());
   if (!wallet) {
@@ -51,7 +50,6 @@ export const handler = async (req: Request, ctx: HandlerContext): Promise<Respon
   }
 
   // delete wallet from subdomain
-  // @ts-ignore
   await kv.set(["subdomains", subdomain], { key, wallets: wallets.filter((w: { symbol: string }) => w.symbol !== symbol.toUpperCase()) }).catch((err) => {
     console.error(err);
     return new Response("Internal server error.", { status: 500 });

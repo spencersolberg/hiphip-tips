@@ -1,5 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
+import Header from "../components/Header.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
@@ -11,23 +12,23 @@ interface Data {
   error?: string;
 }
 
-export const handlers: Handlers = {
+export const handler: Handlers = {
   async GET(_, ctx) {
     return await ctx.render();
   },
   async POST(req, ctx) {
-    // const form = await req.formData();
-    // const subdomain = form.get("subdomain") as string;
-    // if (subdomain) {
-    //   try {
-    //     const key = await createSubdomain(subdomain);
-    //     return ctx.render({ subdomain, key });
-    //   } catch (error) {
-    //     return ctx.render({ subdomain, error });
-    //   }
-    // }
-    // return ctx.render();
-    return await ctx.render();
+    const form = await req.formData();
+    const subdomain = form.get("subdomain") as string;
+    if (subdomain) {
+      try {
+        const key = await createSubdomain(subdomain);
+        return ctx.render({ subdomain, key });
+      } catch (error) {
+        return ctx.render({ subdomain, error: error.message });
+      }
+    }
+    return ctx.render();
+    // return await ctx.render();
     
   },
 };
@@ -37,17 +38,11 @@ export default function SignUp({ data }: PageProps<Data>) {
   return (
     <>
       <Head>
-        <title>hiphiptips</title>
+        <title>hiphiptips - signup</title>
         <Style />
       </Head>
-      <div class="p-4 mx-auto max-w-screen-md flex flex-col text-white">
-        <div class="flex mt-16">
-          {/* <a href="http://about.hiphiptips:8000/" class="text-2xl font-bold mx-auto">About</a> */}
-          <h1 class="text-6xl md:text-8xl dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
-            hiphiptips
-          </h1>
-          {/* <a href="http://login.hiphiptips/" class="text-2xl font-bold mx-auto">Login</a> */}
-        </div>
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+        <Header />
         {!subdomain ?
         <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
 
@@ -70,14 +65,18 @@ export default function SignUp({ data }: PageProps<Data>) {
               class="rounded-md w-full text-3xl px-4 pb-1 pt-0.5 text-center border-2 border-black mt-4 bg-green-400 transition-transform transform-gpu md:motion-safe:hover:scale-110"
               type="submit"
             >
-              Sign Up
+              sign up
             </button>
           </div>
         </form>
         : error ?
         <div class="mx-auto w-full flex flex-col max-w-sm">
-          <h2 class="text-2xl text-center mt-8">Error: {error}</h2>
-      </div> : 
+          <h2 class="text-2xl text-center mt-8">error registering {subdomain}.hiphiptips:</h2>
+          <p class="text-lg dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
+            {error}
+          </p>
+        </div>
+        :
         <div class="mx-auto w-full flex flex-col max-w-sm">
           <h2 class="text-2xl text-center mt-8">Your subdomain is:</h2>
           <h1 class="text-6xl md:text-8xl dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">

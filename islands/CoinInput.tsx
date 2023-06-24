@@ -30,7 +30,7 @@ export default function CoinInput(props: { domain: string }) {
   return (
     <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
     <input
-      class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black text-black"
+      class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-4 text-center border-2 border-black text-black"
       placeholder="enter symbol (e.g. HNS, BTC)"
       name="symbol"
       autocorrect="off"

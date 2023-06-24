@@ -1,16 +1,20 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
+import Header from "../components/Header.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
 import { getSymbols } from "../utils/hip2.ts";
 import { getName } from "../utils/coins.ts";
+import { getSubdomain } from "../utils/subdomains.ts";
+
 import CoinButton from "../components/CoinButton.tsx";
 import CoinInput from "../islands/CoinInput.tsx";
 
-interface Domain {
+interface DomainData {
   domain: string | null;
   coins: Coin[];
+  subdomain?: string;
 }
 
 interface Coin {
@@ -18,15 +22,29 @@ interface Coin {
   name: string;
 }
 
-export const handler: Handlers<Domain | null> = {
-  async GET(_, ctx) {
+export const handler: Handlers<DomainData | null> = {
+  async GET(req, ctx) {
     const { domain } = ctx.params;
     const symbols = await getSymbols(domain);
     const namePromises = symbols.map((symbol) => getName(symbol));
     const names = await Promise.all(namePromises);
     const coins = names.map((name, i) => ({ symbol: symbols[i], name: name ?? "Unknown" }));
 
-    return ctx.render({ domain, coins });
+    // get key from cookie
+    const headers = req.headers;
+    const cookie = headers.get("cookie");
+    const key = cookie?.split("key=")[1]?.split(";")[0];
+
+    // if key exists, get subdomain
+    if (key) {
+      try {
+        const subdomain = await getSubdomain(key);
+        return ctx.render({ subdomain, domain, coins });
+      } catch (error) {
+        return ctx.render({ domain, coins });
+      }
+    }
+    return await ctx.render({ domain, coins });
   },
   async POST(req, ctx) {
     const form = await req.formData();
@@ -44,10 +62,12 @@ export const handler: Handlers<Domain | null> = {
   }
 }
 
-export default function Name({ data }: PageProps<Domain | null>) {
+export default function Name({ data }: PageProps<DomainData | null>) {
   if (!data || !data.domain) {
     return <h1>Name not found</h1>
   }
+
+  const { subdomain } = data;
 
   return (
     <>
@@ -55,12 +75,8 @@ export default function Name({ data }: PageProps<Domain | null>) {
       <title>hiphiptips - {data.domain}</title>
       <Style />
     </Head>
-    <div class="p-4 mx-auto max-w-screen-md flex flex-col text-white">
-      <div class="flex mt-16">
-      <a href="/" class="text-6xl md:text-8xl dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
-        hiphiptips
-      </a>
-      </div>
+    <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <Header subdomain={subdomain} />
       <h2 class="text-4xl font-bold mx-auto mt-8">{data.domain}</h2>
       {data.coins.length > 0 ? (<>
         <h3 class="mx-auto text-3xl mt-8 font-medium">available wallets</h3>
@@ -70,10 +86,10 @@ export default function Name({ data }: PageProps<Domain | null>) {
           ))}
         </div>
       </>) : (<>
-        <h3 class="mx-auto text-3xl mt-8 font-medium">no wallets listed</h3>
+        <h3 class="mx-auto text-3xl mt-8 font-medium">no wallets listed!</h3>
       </>)}
 
-      <h3 class="mx-auto text-3xl mt-8 font-medium">custom wallet</h3>
+      <h3 class="mx-auto text-3xl mt-8 font-medium">custom wallet:</h3>
 
       <CoinInput domain={data.domain} />
 

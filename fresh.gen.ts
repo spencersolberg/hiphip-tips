@@ -12,7 +12,9 @@ import * as $6 from "./routes/api/v1/subdomains/[subdomain].ts";
 import * as $7 from "./routes/api/v1/subdomains/[subdomain]/wallets.ts";
 import * as $8 from "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts";
 import * as $9 from "./routes/index.tsx";
-import * as $10 from "./routes/signup.tsx";
+import * as $10 from "./routes/login.tsx";
+import * as $11 from "./routes/signup.tsx";
+import * as $12 from "./routes/subdomain.tsx";
 import * as $$0 from "./islands/Address.tsx";
 import * as $$1 from "./islands/CoinInput.tsx";
 import * as $$2 from "./islands/Counter.tsx";
@@ -30,7 +32,9 @@ const manifest = {
     "./routes/api/v1/subdomains/[subdomain]/wallets.ts": $7,
     "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts": $8,
     "./routes/index.tsx": $9,
-    "./routes/signup.tsx": $10,
+    "./routes/login.tsx": $10,
+    "./routes/signup.tsx": $11,
+    "./routes/subdomain.tsx": $12,
   },
   islands: {
     "./islands/Address.tsx": $$0,
