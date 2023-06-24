@@ -14,12 +14,14 @@ import * as $8 from "./routes/api/v1/subdomains/[subdomain]/wallets.ts";
 import * as $9 from "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts";
 import * as $10 from "./routes/index.tsx";
 import * as $11 from "./routes/login.tsx";
-import * as $12 from "./routes/signup.tsx";
-import * as $13 from "./routes/subdomain.tsx";
+import * as $12 from "./routes/logout.tsx";
+import * as $13 from "./routes/signup.tsx";
+import * as $14 from "./routes/subdomain.tsx";
 import * as $$0 from "./islands/Address.tsx";
 import * as $$1 from "./islands/CoinInput.tsx";
 import * as $$2 from "./islands/Counter.tsx";
-import * as $$3 from "./islands/QRCode.tsx";
+import * as $$3 from "./islands/Key.tsx";
+import * as $$4 from "./islands/QRCode.tsx";
 
 const manifest = {
   routes: {
@@ -35,14 +37,16 @@ const manifest = {
     "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts": $9,
     "./routes/index.tsx": $10,
     "./routes/login.tsx": $11,
-    "./routes/signup.tsx": $12,
-    "./routes/subdomain.tsx": $13,
+    "./routes/logout.tsx": $12,
+    "./routes/signup.tsx": $13,
+    "./routes/subdomain.tsx": $14,
   },
   islands: {
     "./islands/Address.tsx": $$0,
     "./islands/CoinInput.tsx": $$1,
     "./islands/Counter.tsx": $$2,
-    "./islands/QRCode.tsx": $$3,
+    "./islands/Key.tsx": $$3,
+    "./islands/QRCode.tsx": $$4,
   },
   baseUrl: import.meta.url,
 };

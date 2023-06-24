@@ -68,7 +68,10 @@ export default function SignUp({ data }: PageProps<Data>) {
               sign up
             </button>
           </div>
+          <p class="text-center text-2xl mt-8">already have an account?</p>
+        <a class="text-center text-2xl hover:italic hover:underline mt-2" href="/login"><p>log in</p></a>
         </form>
+        
         : error ?
         <div class="mx-auto w-full flex flex-col max-w-sm">
           <h2 class="text-2xl text-center mt-8">error registering {subdomain}.hiphiptips:</h2>
@@ -76,6 +79,7 @@ export default function SignUp({ data }: PageProps<Data>) {
             {error}
           </p>
         </div>
+        
         :
         <div class="mx-auto w-full flex flex-col max-w-sm">
           <h2 class="text-2xl text-center mt-8">Your subdomain is:</h2>

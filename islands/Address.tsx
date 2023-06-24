@@ -19,7 +19,7 @@ export default function Address(props: { address: string }) {
       onClick={() => {
         if (javascript) {
           navigator.clipboard.writeText(address);
-          setAddressDisplay("Copied! 📋");
+          setAddressDisplay("copied! 📋");
           setTimeout(() => {
             const first = address.slice(0, 6);
             const last = address.slice(-4);

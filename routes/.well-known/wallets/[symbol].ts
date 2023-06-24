@@ -20,7 +20,6 @@ export const handler = async (req: Request, ctx: HandlerContext): Promise<Respon
       return new Response(null, { status: 404 });
     }
     const body = wallet.address;
-    console.log(body);
     return new Response(body);
   } catch (_err) {
     return new Response(null, { status: 404 });

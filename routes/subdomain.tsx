@@ -2,8 +2,8 @@ import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
 import CoinButton from "../components/CoinButton.tsx";
-import type { Wallet } from "../utils/subdomains.ts";
 import { getName } from "../utils/coins.ts";
+import Key from "../islands/Key.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getSubdomain, deleteSubdomain, addSubdomainWallet, deleteSubdomainWallet, getSubdomainWallets } from "../utils/subdomains.ts";
@@ -11,6 +11,7 @@ import { getSubdomain, deleteSubdomain, addSubdomainWallet, deleteSubdomainWalle
 interface Data {
   subdomain?: string;
   wallets?: walletsWithNames[];
+  key: string;
 }
 
 interface walletsWithNames {
@@ -36,14 +37,12 @@ export const handler: Handlers = {
         const namePromises = wallets.map((wallet) => getName(wallet.symbol));
         const names = await Promise.all(namePromises);
 
-        console.log(names);
-
         // add names to wallets
 
         const walletsWithNames = wallets.map((wallet, i) => ({ ...wallet, name: names[i] ?? "Unknown" }));
 
 
-        return ctx.render({ subdomain, wallets: walletsWithNames });
+        return ctx.render({ subdomain, wallets: walletsWithNames, key });
       } catch (error) {
         // redirect to /login
         const headers = new Headers();
@@ -137,7 +136,7 @@ export const handler: Handlers = {
 }
 
 export default function Subdomain({ data }: PageProps<Data>) {
-  const { subdomain, wallets } = data;
+  const { subdomain, wallets, key } = data;
 
   return (
     <>
@@ -149,28 +148,50 @@ export default function Subdomain({ data }: PageProps<Data>) {
         <Header subdomain={subdomain} />
 
       {/* Display wallets here */}
+      <div class="max-w-sm mx-auto w-full">
 
+        <h1 class="text-4xl font-bold mt-8">your wallets</h1>
+
+      </div>
+
+    <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mt-8">
       {wallets && wallets.map((wallet) => {
         return (
-          <form class="grid grid-cols-2 gap-4 max-w-sm mx-auto mt-8" method="post">
-                <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black hidden" type="hidden" name="symbol" value={wallet.symbol} />
-                <div class="h-10 mt-8">
+          <form class="" method="post">
+                <input class="hidden" type="hidden" name="symbol" value={wallet.symbol} />
                   <CoinButton symbol={wallet.symbol} domain={subdomain + ".hiphiptips"} name={wallet.name} generic={wallet.name == "Unknown"} />
-                  </div>
-                <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center h-14 border-2 border-black text-white bg-red-400 transition-transform transform-gpu hover:scale-110" type="submit" value="deleteSubdomainWallet" name="submit">delete</button>
+                <button class="w-full text-xl  mt-2 text-center text-red-400 hover:underline hover:italic" type="submit" value="deleteSubdomainWallet" name="submit"><p>delete</p></button>
               </form>
         )
       })}
+      </div>
 
 
       <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
-        <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black text-black" type="text" name="symbol" placeholder="symbol" />
-        <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black text-black" type="text" name="address" placeholder="address" />
-        <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black text-white bg-green-400 transition-transform transform-gpu hover:scale-110" type="submit" value="createSubdomainWallet" name="submit">create subdomain wallet</button>
+        <h1 class="text-4xl font-bold mt-8">add wallet</h1>
+        <div class="grid grid-cols-2">
+        <label class="text-xl mt-2 mr-2 text-slate-400"><p>symbol</p></label>
+        <label class="text-xl mt-2   ml-2 text-slate-400"><p>address</p></label>
+        </div>
+        <div class="flex justify-between">
+        <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5  mr-2 text-left border-2 border-black text-black" type="text" name="symbol" placeholder="HNS" />
+        <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5  ml-2 text-left border-2 border-black text-black" type="text" name="address" placeholder="hs1..." />
+        </div>
+        <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-2 text-center border-2 border-black text-white bg-green-400 transition-transform transform-gpu hover:scale-110" type="submit" value="createSubdomainWallet" name="submit">add wallet</button>
       </form>
 
+      <div class="max-w-sm mx-auto w-full">
+
+        <h1 class="text-4xl font-bold mt-8">your key</h1>
+        <div class="mx-auto text-center">
+          <Key keyValue={key} />
+        </div>
+
+      </div>
+
       <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
-        <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-center border-2 border-black text-white bg-red-400 transition-transform transform-gpu hover:scale-110" type="submit" value="deleteSubdomain" name="submit">delete subdomain</button>
+        <a href="/logout" class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-4 text-center border-2 border-black text-white bg-yellow-400 transition-transform transform-gpu hover:scale-110">logout</a>
+        <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-2 text-center border-2 border-black text-white bg-red-400 transition-transform transform-gpu hover:scale-110" type="submit" value="deleteSubdomain" name="submit">delete subdomain</button>
       </form>
       </div>
     </>
