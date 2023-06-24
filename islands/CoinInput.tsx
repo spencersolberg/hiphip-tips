@@ -1,4 +1,5 @@
 import { useState, useEffect } from "preact/hooks";
+import { JSX } from "preact";
 import { getInfo } from "../utils/coins.ts";
 
 import CoinButton from "../components/CoinButton.tsx";
@@ -7,7 +8,7 @@ export default function CoinInput(props: { domain: string }) {
   const { domain } = props;
   
   const [symbol, setSymbol] = useState<string>("");
-  const handleChange = (e: any) => setSymbol(e.target.value);
+  const handleChange = ({currentTarget}: JSX.TargetedEvent<HTMLInputElement, Event>) => setSymbol(currentTarget.value);
   const [javascript, setJavascript] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [generic, setGeneric] = useState<boolean>(false);

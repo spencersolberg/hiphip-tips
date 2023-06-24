@@ -5,3 +5,4 @@
 .env.production.local
 .env.local
 letsdane.crt
+*.DS_Store
