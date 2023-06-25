@@ -12,9 +12,9 @@ export default function Key(props: { keyValue: string }) {
     setJavascript(true);
   }, []);
 
-  return (
+  return (<>
     <p
-      class={`text-lg mx-auto mt-4 text-gray-300 ${javascript ? "cursor-pointer transition-transform transform-gpu hover:scale-105 hover:underline" : ""}`}
+      class={`text-lg mx-auto mt-4 text-slate-400 ${javascript ? "cursor-pointer transition-transform transform-gpu hover:scale-105 hover:underline" : ""}`}
       onClick={() => {
         if (javascript) {
           navigator.clipboard.writeText(keyValue);
@@ -25,5 +25,6 @@ export default function Key(props: { keyValue: string }) {
         }
       }}
     >{keyDisplay}</p>
-  )
+    <p class={`${javascript ? "" : "hidden"} mx-auto mt-4 text-slate-400`}>click to copy</p>
+  </>)
 }

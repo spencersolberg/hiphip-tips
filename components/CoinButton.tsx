@@ -17,7 +17,7 @@ export default function CoinButton(props: CoinButtonProps) {
     <a href={`/${domain}/${symbol.toUpperCase()}`} class="flex rounded-md border border-white p-2 transition-transform transform-gpu hover:scale-110 bg-black text-white">
       <img src={imageUrl} class="w-8 h-8 mr-2" />
       <div class="flex flex-col">
-        {generic ? <span class="text-sm">{symbol.toUpperCase()}</span> : <>
+        {generic ? <span class="text-lg">{symbol === "" ? "…" : symbol.toUpperCase()}</span> : <>
         
         <span class="text-sm">{name}</span>
         <span class="text-xs">{symbol.toUpperCase()}</span>

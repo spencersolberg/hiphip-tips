@@ -41,7 +41,7 @@ export default function CoinInput(props: { domain: string }) {
       onInput={handleChange}
     />
     <div class="max-w-sm mx-auto px-2 mt-4">
-      { javascript ? symbol && <CoinButton domain={domain} symbol={symbol} generic={generic} name={name} /> :       <button
+      { javascript ? <CoinButton domain={domain} symbol={symbol} generic={generic} name={name} /> :       <button
         class="rounded-md w-full text-3xl px-4 pb-1 pt-0.5 text-center border-2 border-black  bg-green-400 transition-transform transform-gpu md:motion-safe:hover:scale-110"
         type="submit"
       >

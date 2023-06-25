@@ -45,6 +45,12 @@ export default function Login({ data }: PageProps<Data>) {
       <Head>
         <title>hiphiptips - login</title>
         <Style />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:url" content="/" />
+        <meta name="twitter:title" content="hiphiptips" />
+        <meta name="twitter:description" content="Easily send crypto to domain names" />
+        <meta name="twitter:image" content="/favicon/apple-icon.png" />
+        <meta content="#34D399" name="theme-color" />
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header />

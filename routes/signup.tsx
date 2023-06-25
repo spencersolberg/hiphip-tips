@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Key from "../islands/Key.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
@@ -88,16 +89,16 @@ export default function SignUp({ data }: PageProps<Data>) {
         
         :
         <div class="mx-auto w-full flex flex-col max-w-sm">
-          <h2 class="text-2xl text-center mt-8">Your subdomain is:</h2>
-          <h1 class="text-6xl md:text-8xl dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
+          <h2 class="text-2xl text-center mt-8">your subdomain is:</h2>
+          <p class="text-xl text-white text-center mt-4 break-all max-w-3xl mx-auto">
             {subdomain}.hiphiptips
-          </h1>
-          <h2 class="text-2xl text-center mt-8">Your key is:</h2>
-          <h1 class="text-6xl md:text-8xl dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
-            {key}
-          </h1>
-          <h2 class="text-2xl text-center mt-8">Save this key somewhere safe!</h2>
-          <h2 class="text-2xl text-center mt-8">You will need it to login.</h2>
+          </p>
+          <h2 class="text-2xl text-center mt-8">your key is:</h2>
+          <div class="mx-auto text-center">
+          <Key keyValue={key!} />
+          </div>
+          <h2 class="text-2xl text-center mt-8">save this key somewhere safe!</h2>
+          <h2 class="text-2xl text-center mt-8">you will need it to login.</h2>
       </div>
         }
       </div>
