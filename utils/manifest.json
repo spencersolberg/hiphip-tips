@@ -357,7 +357,8 @@
 	{
 		"symbol": "BTC",
 		"name": "Bitcoin",
-		"color": "#f7931a"
+		"color": "#f7931a",
+		"pattern": "^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$"
 	},
 	{
 		"symbol": "BTCD",
@@ -1022,7 +1023,8 @@
 	{
 		"symbol": "HNS",
 		"name": "Handshake",
-		"color": "#000000"
+		"color": "#000000",
+		"pattern": "hs1[a-z02-9]{39,87}"
 	},
 	{
 		"symbol": "HODL",

@@ -1,6 +1,6 @@
 import { assertEquals } from "$std/testing/asserts.ts";
 
-import { getName, getColor, getInfo } from "../utils/coins.ts";
+import { getName, getColor, getInfo, validateAddress } from "../utils/coins.ts";
 
 // Deno.test("Get symbols", async () => {
 //   const name = "spencersolberg";
@@ -31,5 +31,18 @@ Deno.test("Get info", () => {
     symbol: "HNS",
     color: "#000000",
     name: "Handshake",
+    pattern: "hs1[a-z02-9]{39,87}"
   });
 });
+
+Deno.test("Validate address", () => {
+  const symbol = "HNS";
+  const goodAddress = "hs1qqsc065xcsh68nt25h4vsmgx7vcyrwtajlhlxlc";
+  const badAddress = "Ahahaha111";
+
+  const good = validateAddress(symbol, goodAddress);
+  const bad = validateAddress(symbol, badAddress);
+
+  assertEquals(good, true);
+  assertEquals(bad, false);
+})

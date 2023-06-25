@@ -4,6 +4,7 @@ interface Coin {
   symbol: string;
   color: string;
   name: string;
+  pattern?: string;
 }
 // const manifest: Coin[] = await fetch(manifestURL).then((res) => res.json());
 import _manifest from "./manifest.json" assert { type: "json" };
@@ -29,4 +30,16 @@ export const getInfo = (symbol: string): Coin | undefined => {
 
 export const constructURL = (_symbol: string, address: string): string => {
   return address;
+}
+
+export const validateAddress = (symbol: string, address: string): boolean => {
+  const coin = manifest.find((coin) => coin.symbol === symbol.toUpperCase());
+
+  if (!coin?.pattern) {
+    return true;
+  }
+
+  const regex = new RegExp(coin.pattern);
+
+  return regex.test(address);
 }

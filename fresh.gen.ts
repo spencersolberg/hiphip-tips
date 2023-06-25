@@ -21,7 +21,8 @@ import * as $$0 from "./islands/Address.tsx";
 import * as $$1 from "./islands/CoinInput.tsx";
 import * as $$2 from "./islands/Counter.tsx";
 import * as $$3 from "./islands/Key.tsx";
-import * as $$4 from "./islands/QRCode.tsx";
+import * as $$4 from "./islands/NewWallet.tsx";
+import * as $$5 from "./islands/QRCode.tsx";
 
 const manifest = {
   routes: {
@@ -46,7 +47,8 @@ const manifest = {
     "./islands/CoinInput.tsx": $$1,
     "./islands/Counter.tsx": $$2,
     "./islands/Key.tsx": $$3,
-    "./islands/QRCode.tsx": $$4,
+    "./islands/NewWallet.tsx": $$4,
+    "./islands/QRCode.tsx": $$5,
   },
   baseUrl: import.meta.url,
 };

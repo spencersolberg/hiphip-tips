@@ -4,6 +4,7 @@ import Header from "../components/Header.tsx";
 import CoinButton from "../components/CoinButton.tsx";
 import { getName } from "../utils/coins.ts";
 import Key from "../islands/Key.tsx";
+import NewWallet from "../islands/NewWallet.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getSubdomain, deleteSubdomain, addSubdomainWallet, deleteSubdomainWallet, getSubdomainWallets } from "../utils/subdomains.ts";
@@ -172,19 +173,7 @@ export default function Subdomain({ data }: PageProps<Data>) {
       })}
       </div>
 
-
-      <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
-        <h1 class="text-4xl font-bold mt-8">add wallet</h1>
-        <div class="grid grid-cols-2">
-        <label class="text-xl mt-2 mr-2 text-slate-400"><p>symbol</p></label>
-        <label class="text-xl mt-2   ml-2 text-slate-400"><p>address</p></label>
-        </div>
-        <div class="flex justify-between">
-        <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5  mr-2 text-left border-2 border-black text-black" type="text" name="symbol" placeholder="HNS" />
-        <input class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5  ml-2 text-left border-2 border-black text-black" type="text" name="address" placeholder="hs1..." />
-        </div>
-        <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-2 text-center border-2 border-black text-white bg-green-400 transition-transform transform-gpu hover:scale-110" type="submit" value="createSubdomainWallet" name="submit">add wallet</button>
-      </form>
+      <NewWallet />
 
       <div class="max-w-sm mx-auto w-full">
 
