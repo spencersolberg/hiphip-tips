@@ -28,8 +28,15 @@ export const getInfo = (symbol: string): Coin | undefined => {
   return coin;
 }
 
-export const constructURL = (_symbol: string, address: string): string => {
-  return address;
+export const constructURL = (symbol: string, address: string): string => {
+  const name = getName(symbol);
+  if (!name) {
+    return address;
+  } else if (name?.includes(" ")) {
+    return address;
+  } else {
+    return `${name.toLowerCase()}:${address}`;
+  }
 }
 
 export const validateAddress = (symbol: string, address: string): boolean => {
