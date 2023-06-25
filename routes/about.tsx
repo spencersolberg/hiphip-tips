@@ -55,7 +55,7 @@ export default function About({ data }: PageProps<Data>) {
             <a class="underline hover:italic" href="https://github.com/handshake-org/HIPs/blob/master/HIP-0002.md">
               HIP-0002
             </a>, a simple protocol for aliasing wallet addresses with domain
-            names.
+            names
           </p>
           <p class="text-xl mt-4">
             hiphiptips supports <a class="underline hover:italic" href="https://handshake.org">Handshake</a>
@@ -64,7 +64,7 @@ export default function About({ data }: PageProps<Data>) {
             <a class="underline hover:italic" href="https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">
               DANE TLS
             </a>{" "}
-            protocol.
+            protocol
           </p>
           <p class="text-xl mt-4">
             in addition to the standard HIP-0002 specification, hiphiptips
