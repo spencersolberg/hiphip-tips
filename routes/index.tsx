@@ -32,7 +32,7 @@ export const handler: Handlers = {
     const domain = form.get("domain");
     if (domain) {
       const headers = new Headers();
-      headers.set("Location", `/${domain}`);
+      headers.set("Location", `/@${domain}`);
       return new Response(null, {
         status: 303,
         headers,
@@ -52,7 +52,10 @@ export default function Home({ data }: PageProps<Data>) {
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="/" />
         <meta name="twitter:title" content="hiphiptips" />
-        <meta name="twitter:description" content="Easily send crypto to domain names" />
+        <meta
+          name="twitter:description"
+          content="Easily send crypto to domain names"
+        />
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>

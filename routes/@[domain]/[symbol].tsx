@@ -9,6 +9,11 @@ import Style from "../../components/Style.tsx";
 import Header from "../../components/Header.tsx";
 
 import Address from "../../islands/Address.tsx";
+import { RouteConfig } from "$fresh/server.ts";
+
+export const config: RouteConfig = {
+  routeOverride: "/@:domain/:symbol",
+};
 
 interface WalletData {
   domain: string | null;
@@ -66,7 +71,7 @@ export default function Name({ data }: PageProps<WalletData>) {
         <title>{data.symbol} | {data.domain} | hiphiptips</title>
         <Style />
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:url" content={`/${data.domain}/${data.symbol}`} />
+        <meta name="twitter:url" content={`/@${data.domain}/${data.symbol}`} />
         <meta name="twitter:title" content={`${data.symbol} | ${data.domain}/ | hiphiptips`} />
         <meta name="twitter:description" content={twitterDescription} />
         <meta name="twitter:image" content={`/api/v1/domains/${data.domain}/symbols/${data.symbol}/qrcode`} />
@@ -74,7 +79,7 @@ export default function Name({ data }: PageProps<WalletData>) {
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header subdomain={data.subdomain} />
-        <a href={`/${data.domain}`} class="text-2xl font-bold mx-auto mt-8">{data.domain}</a>
+        <a href={`/@${data.domain}`} class="text-2xl font-bold mx-auto mt-8">{data.domain}</a>
         { data.address ? (<>
           <h3 class="mx-auto text-3xl mt-8 font-medium">{data.coin} {`(${data.symbol})`}</h3>
           <div class="mx-auto mt-4 transition-transform transform-gpu hover:scale-110">

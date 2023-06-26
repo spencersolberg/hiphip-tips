@@ -10,6 +10,11 @@ import { getSubdomain } from "../utils/subdomains.ts";
 
 import CoinButton from "../components/CoinButton.tsx";
 import CoinInput from "../islands/CoinInput.tsx";
+import { RouteConfig } from "$fresh/server.ts";
+
+export const config: RouteConfig = {
+  routeOverride: "/@:domain",
+};
 
 interface DomainData {
   domain: string | null;
@@ -52,7 +57,7 @@ export const handler: Handlers<DomainData | null> = {
     const { domain } = ctx.params;
     if (symbol) {
       const headers = new Headers();
-      headers.set("Location", `/${domain}/${symbol.toUpperCase()}`);
+      headers.set("Location", `/@${domain}/${symbol.toUpperCase()}`);
       return new Response(null, {
         status: 303,
         headers,
@@ -81,7 +86,7 @@ export default function Name({ data }: PageProps<DomainData | null>) {
       <title>{data.domain} | hiphiptips</title>
       <Style />
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:url" content={`/${data.domain}`} />
+      <meta name="twitter:url" content={`/@${data.domain}`} />
       <meta name="twitter:title" content={`${data.domain}/ | hiphiptips`} />
       <meta name="twitter:description" content={twitterDescription} />
       <meta name="twitter:image" content="/favicon/apple-icon.png" />

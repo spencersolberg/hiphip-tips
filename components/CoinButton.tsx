@@ -14,7 +14,7 @@ export default function CoinButton(props: CoinButtonProps) {
 
   const imageUrl = !generic ? `https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/color/${symbol.toLowerCase()}.svg` : "https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/svg/color/generic.svg" ;
   return (
-    <a href={`/${domain}/${symbol.toUpperCase()}`} class="flex rounded-md border border-white p-2 transition-transform transform-gpu hover:scale-110 bg-black text-white">
+    <a href={`/@${domain}/${symbol.toUpperCase()}`} class="flex rounded-md border border-white p-2 transition-transform transform-gpu hover:scale-110 bg-black text-white">
       <img src={imageUrl} class="w-8 h-8 mr-2" />
       <div class="flex flex-col">
         {generic ? <span class="text-lg">{symbol === "" ? "…" : symbol.toUpperCase()}</span> : <>

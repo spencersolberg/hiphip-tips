@@ -4,8 +4,8 @@
 
 import * as $0 from "./routes/.well-known/wallets.ts";
 import * as $1 from "./routes/.well-known/wallets/[symbol].ts";
-import * as $2 from "./routes/[domain].tsx";
-import * as $3 from "./routes/[domain]/[symbol].tsx";
+import * as $2 from "./routes/@[domain].tsx";
+import * as $3 from "./routes/@[domain]/[symbol].tsx";
 import * as $4 from "./routes/about.tsx";
 import * as $5 from "./routes/api/joke.ts";
 import * as $6 from "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts";
@@ -29,8 +29,8 @@ const manifest = {
   routes: {
     "./routes/.well-known/wallets.ts": $0,
     "./routes/.well-known/wallets/[symbol].ts": $1,
-    "./routes/[domain].tsx": $2,
-    "./routes/[domain]/[symbol].tsx": $3,
+    "./routes/@[domain].tsx": $2,
+    "./routes/@[domain]/[symbol].tsx": $3,
     "./routes/about.tsx": $4,
     "./routes/api/joke.ts": $5,
     "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts": $6,
