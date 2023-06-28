@@ -52,7 +52,7 @@ export default function About({ data }: PageProps<Data>) {
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header subdomain={data?.subdomain} />
-        <div class="flex flex-col max-w-sm mx-auto">
+        <div class="flex flex-col max-w-sm mx-auto mt-4">
           <h1 class="text-4xl font-bold">about</h1>
           <p class="text-xl mt-4">
             hiphiptips is the easiest way to get started with{" "}
