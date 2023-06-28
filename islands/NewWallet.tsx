@@ -22,7 +22,7 @@ export default function NewWallet() {
 
   const checkAddress = () => {
     const valid = validateAddress(symbol, address);
-    console.log("valid", valid);
+    // console.log("valid", valid);
     if (!valid) {
       setWarning(true);
       return;
@@ -41,17 +41,7 @@ export default function NewWallet() {
       if (e.key === "Enter") {
           if (!(e.target instanceof HTMLInputElement)) return;
           if (e.target.type=="text") {
-              e.preventDefault();
-
-              if (!warning) {
-                // click check button
-                const check = document.getElementById("check");
-                if (check) {
-                  check.click();
-                }
-              }
-
-              return false;
+            e.preventDefault();
           }
       }
   }, true);

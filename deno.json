@@ -2,7 +2,8 @@
   "lock": false,
   "tasks": {
     "start": "deno run --unstable --allow-read --allow-net --allow-env --allow-run --allow-write --watch=static/,routes/ dev.ts",
-    "test": "deno test --unstable --allow-read --allow-net"
+    "test": "deno test --unstable --allow-read --allow-net",
+    "jwt": "deno run --allow-write tools/jwt.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
@@ -19,6 +20,12 @@
     "twind/": "https://esm.sh/twind@0.16.19/",
     "$std/": "https://deno.land/std@0.187.0/",
     "qr-code-styling": "https://cdn.skypack.dev/qr-code-styling@1.6.0-rc.1?dts",
-    "qr_image_color": "https://deno.land/x/qr_image_color@initial/mod.ts"
+    "qr_image_color": "https://deno.land/x/qr_image_color@initial/mod.ts",
+    "@simplewebauthn/server": "https://esm.sh/@simplewebauthn/server@7.3.1",
+    "@simplewebauthn/server/": "https://esm.sh/@simplewebauthn/server@7.3.1/",
+    "@simplewebauthn/browser": "https://esm.sh/@simplewebauthn/browser@7.2.0",
+    "@simplewebauthn/typescript-types": "npm:@simplewebauthn/typescript-types@7.0.0",
+    "jose": "https://deno.land/x/jose@v4.14.4/index.ts",
+    "random-word-slugs": "npm:random-word-slugs@0.0.3"
   }
 }

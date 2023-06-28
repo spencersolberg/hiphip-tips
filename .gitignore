@@ -6,3 +6,6 @@
 .env.local
 letsdane.crt
 *.DS_Store
+jwt.key
+jwt.key.pub
+jwks.json

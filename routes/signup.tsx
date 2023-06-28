@@ -2,10 +2,14 @@ import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
 import Key from "../islands/Key.tsx";
+import SignUpForm from "../islands/SignUpForm.tsx";
+import { JSX } from "preact";
+import { useState } from "preact/hooks";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
 import { createSubdomain } from "../utils/subdomains.ts";
+import { startRegistration } from "@simplewebauthn/browser";
 
 interface Data {
   subdomain?: string;
@@ -35,7 +39,36 @@ export const handler: Handlers = {
 };
 
 export default function SignUp({ data }: PageProps<Data>) {
-  const { subdomain = undefined, key = undefined, error = undefined } = data ?? {};
+  const {
+    // subdomain = undefined,
+    key = undefined, error =
+    undefined } = data ?? {};
+  const [subdomain, setSubdomain] = useState<string | undefined>(undefined);
+  const handleChange = ({currentTarget}: JSX.TargetedEvent<HTMLInputElement, Event>) => setSubdomain(currentTarget.value);
+
+  const signUp = async () => {
+    // console.log("signing up");
+    const generateResponse = await fetch(`/auth/generate?subdomain=${subdomain}`);
+
+    const options = await generateResponse.json();
+    let registration;
+    try {
+      registration = await startRegistration(options);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+
+    const verificationResponse = await fetch("/auth/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(registration),
+    });
+
+    const verification = await verificationResponse.json();
+
+    // console.log(verification);
+  }
   return (
     <>
       <Head>
@@ -50,57 +83,9 @@ export default function SignUp({ data }: PageProps<Data>) {
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header />
-        {!subdomain ?
-        <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
-
-          <div class="flex mx-auto w-full max-w-sm">
-
-          <input
-            class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-8 text-right border-2 border-black text-black"
-            placeholder="yoursubdomain"
-            name="subdomain"
-            autocorrect="off"
-            spellcheck={false}
-            autocapitalize="none"
-          />
-          <h2 class="mt-9 ml-2 text-2xl">.hiphiptips</h2>
-
-          </div>
-
-          <div class="max-w-sm mx-auto px-2">
-            <button
-              class="rounded-md w-full text-3xl px-4 pb-1 pt-0.5 text-center border-2 border-black mt-4 bg-green-400 transition-transform transform-gpu md:motion-safe:hover:scale-110"
-              type="submit"
-            >
-              sign up
-            </button>
-          </div>
-          <p class="text-center text-2xl mt-8">already have an account?</p>
-        <a class="text-center text-2xl hover:italic hover:underline mt-2" href="/login"><p>log in</p></a>
-        </form>
         
-        : error ?
-        <div class="mx-auto w-full flex flex-col max-w-sm">
-          <h2 class="text-2xl text-center mt-8">error registering {subdomain}.hiphiptips:</h2>
-          <p class="text-lg dark:text-white text-center mt-4 break-all max-w-3xl mx-auto">
-            {error}
-          </p>
-        </div>
+        <SignUpForm />
         
-        :
-        <div class="mx-auto w-full flex flex-col max-w-sm">
-          <h2 class="text-2xl text-center mt-8">your subdomain is:</h2>
-          <p class="text-xl text-white text-center mt-4 break-all max-w-3xl mx-auto">
-            {subdomain}.hiphiptips
-          </p>
-          <h2 class="text-2xl text-center mt-8">your key is:</h2>
-          <div class="mx-auto text-center">
-          <Key keyValue={key!} />
-          </div>
-          <h2 class="text-2xl text-center mt-8">save this key somewhere safe!</h2>
-          <h2 class="text-2xl text-center mt-8">you will need it to login.</h2>
-      </div>
-        }
       </div>
     </>
   );

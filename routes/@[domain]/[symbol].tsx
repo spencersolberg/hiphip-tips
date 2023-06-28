@@ -1,7 +1,9 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import { getAddress } from "../../utils/hip2.ts";
 import { getInfo } from "../../utils/coins.ts";
-import { getSubdomain } from "../../utils/subdomains.ts";
+// import { getSubdomain } from "../../utils/subdomains.ts";
+import { getSubdomain } from "../../utils/kv.ts";
+import { verifyToken } from "../../utils/jwt.ts";
 
 import QRCode from "../../islands/QRCode.tsx";
 import { Head } from "$fresh/runtime.ts";
@@ -43,21 +45,26 @@ export const handler: Handlers<WalletData> = {
     const color = info?.color;
     const coin = info?.name;
 
-    // get key from cookie
+    // get token from cookie
     const headers = req.headers;
     const cookie = headers.get("cookie");
-    const key = cookie?.split("key=")[1]?.split(";")[0];
+    const token = cookie?.split("token=")[1]?.split(";")[0];
 
-    // if key exists, get subdomain
-    if (key) {
+    // if token exists, verify it
+    if (token) {
       try {
-        const subdomain = await getSubdomain(key);
-        return ctx.render({ subdomain, domain, symbol, address, color, coin});
+        const { uuid } = await verifyToken(token);
+        const subdomain = await getSubdomain(uuid);
+
+        return ctx.render({ subdomain, domain, symbol, address, color, coin });
       } catch (error) {
-        return ctx.render({ domain, symbol, address, color, coin});
+        console.error(error);
+        return ctx.render({ domain, symbol, address, color, coin });
       }
+    } else {
+      return ctx.render({ domain, symbol, address, color, coin });
     }
-    return await ctx.render({ domain, symbol, address, color, coin});
+    
   }
 }
 

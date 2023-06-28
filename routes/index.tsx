@@ -3,7 +3,9 @@ import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { getSubdomain } from "../utils/subdomains.ts";
+// import { getSubdomain } from "../utils/subdomains.ts";
+import { getSubdomain } from "../utils/kv.ts";
+import { verifyToken } from "../utils/jwt.ts";
 
 interface Data {
   subdomain?: string;
@@ -11,21 +13,23 @@ interface Data {
 
 export const handler: Handlers = {
   async GET(req, ctx) {
-    // get key from cookie
+    // get token from cookie
     const headers = req.headers;
     const cookie = headers.get("cookie");
-    const key = cookie?.split("key=")[1]?.split(";")[0];
+    const token = cookie?.split("token=")[1]?.split(";")[0];
 
-    // if key exists, get subdomain
-    if (key) {
+    // if token exists, verify it
+    if (token) {
       try {
-        const subdomain = await getSubdomain(key);
+        const { uuid } = await verifyToken(token);
+        const subdomain = await getSubdomain(uuid);
         return ctx.render({ subdomain });
       } catch (error) {
         return ctx.render();
       }
+    } else {
+      return ctx.render();
     }
-    return await ctx.render();
   },
   async POST(req, ctx) {
     const form = await req.formData();
