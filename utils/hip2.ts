@@ -25,9 +25,9 @@ export const parseText = (text: string): string[] => {
 
 
 export type Security = "handshake" | "dane" | "ca";
-import _icannTLDS from "../icannTLDS.json" assert { type: "json" };
+import _icannTLDs from "../icannTLDs.json" assert { type: "json" };
 
-const icannTLDs: string[] = _icannTLDS;
+const icannTLDs: string[] = _icannTLDs;
 
 const getHandshakeSymbols = async (name: string): Promise<string[]> => {
   const protocol = 

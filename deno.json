@@ -3,7 +3,8 @@
   "tasks": {
     "start": "deno run --unstable --allow-read --allow-net --allow-env --allow-run --allow-write --watch=static/,routes/ dev.ts",
     "test": "deno test --unstable --allow-read --allow-net",
-    "jwt": "deno run --allow-write tools/jwt.ts"
+    "jwt": "deno run --allow-write tools/jwt.ts",
+    "icann": "deno run --allow-net --allow-write tools/icann.ts"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
