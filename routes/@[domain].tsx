@@ -4,7 +4,8 @@ import Header from "../components/Header.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
-import { getSymbols } from "../utils/hip2.ts";
+import { getSymbols, isHandshake } from "../utils/hip2.ts";
+import type { Security } from "../utils/hip2.ts";
 import { getName } from "../utils/coins.ts";
 // import { getSubdomain } from "../utils/subdomains.ts";
 import { getSubdomain } from "../utils/kv.ts";
@@ -22,6 +23,7 @@ interface DomainData {
   domain: string | null;
   coins: Coin[];
   subdomain?: string;
+  security: Security;
 }
 
 interface Coin {
@@ -31,16 +33,32 @@ interface Coin {
 
 export const handler: Handlers<DomainData | null> = {
   async GET(req, ctx) {
-    const { domain } = ctx.params;
-    const symbols = await getSymbols(domain);
-    const namePromises = symbols.map((symbol) => getName(symbol));
-    const names = await Promise.all(namePromises);
-    const coins = names.map((name, i) => ({ symbol: symbols[i], name: name ?? "Unknown" }));
-
-    // get token from cookie
     const headers = req.headers;
     const cookie = headers.get("cookie");
     const token = cookie?.split("token=")[1]?.split(";")[0];
+    const security: Security = cookie?.split("security=")[1]?.split(";")[0] as Security ?? "handshake";
+
+    const { domain } = ctx.params;
+
+    if (isHandshake(domain) && security !== "handshake" && !token) {
+      const headers = new Headers();
+      const reqURL = new URL(req.url);
+      const hostname = reqURL.hostname;
+      const secure = reqURL.protocol === "https:";
+  
+    
+      headers.set("Location", `/@${domain}`);
+      headers.set("Set-Cookie", `security=handshake; Path=/; HttpOnly;${secure && " Secure;"} SameSite=Strict; Domain=.${hostname};`);
+      return new Response(null, {
+        status: 303,
+        headers,
+      });
+    }
+
+    const symbols = await getSymbols(domain, security) ?? [];
+    const namePromises = symbols.map((symbol) => getName(symbol));
+    const names = await Promise.all(namePromises);
+    const coins = names.map((name, i) => ({ symbol: symbols[i], name: name ?? "Unknown" }));
 
     // if token exists, verify it
     if (token) {
@@ -48,13 +66,13 @@ export const handler: Handlers<DomainData | null> = {
         const { uuid } = await verifyToken(token);
         const subdomain = await getSubdomain(uuid);
 
-        return ctx.render({ subdomain, domain, coins });
+        return ctx.render({ subdomain, domain, coins, security });
       } catch (error) {
         console.error(error);
-        return ctx.render({ domain, coins });
+        return ctx.render({ domain, coins, security });
       }
     } else {
-      return ctx.render({ domain, coins });
+      return ctx.render({ domain, coins, security });
     }
     
   },
@@ -79,7 +97,7 @@ export default function Name({ data }: PageProps<DomainData | null>) {
     return <h1>Name not found</h1>
   }
 
-  const { subdomain } = data;
+  const { subdomain, security } = data;
 
   const descriptionCurrencies = data.coins.length > 1 
   ? data.coins[0].symbol + ", " + data.coins[1].symbol
@@ -111,6 +129,13 @@ export default function Name({ data }: PageProps<DomainData | null>) {
         </div>
       </>) : (<>
         <h3 class="mx-auto text-3xl mt-8 font-medium">no wallets listed!</h3>
+        {security === "handshake" ? 
+        <form method="POST" class="mx-auto" action="/security">
+          <input type="hidden" name="path" value={`/@${data.domain}`} />
+          <input type="hidden" name="security" value="ca" />
+          <button type="submit" class="mx-auto text-center text-lg mt-8 underline hover:italic"><p>try with CA security (less secure)</p></button>
+        </form> : null}
+
       </>)}
 
       <h3 class="mx-auto text-3xl mt-8 font-medium">custom wallet:</h3>

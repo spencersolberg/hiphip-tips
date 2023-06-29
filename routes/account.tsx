@@ -12,6 +12,7 @@ import { getSubdomain, deleteSubdomain, addSubdomainWallet, deleteSubdomainWalle
 import { verifyToken } from "../utils/jwt.ts";
 
 import type { NamedAuthenticatorDevice } from "../utils/kv.ts";
+import type { Security } from "../utils/hip2.ts";
 
 interface Data {
   subdomain?: string;
@@ -19,6 +20,7 @@ interface Data {
   error?: string;
   authenticators?: NamedAuthenticatorDevice[];
   currentAuthenticator?: string;
+  security: Security;
 }
 
 interface walletsWithNames {
@@ -33,6 +35,7 @@ export const handler: Handlers = {
     const headers = req.headers;
     const cookie = headers.get("cookie");
     const token = cookie?.split("token=")[1]?.split(";")[0];
+    const security = cookie?.split("security=")[1]?.split(";")[0] as Security ?? "handshake";
 
     // if token exists, verify it
     if (token) {
@@ -51,7 +54,7 @@ export const handler: Handlers = {
 
         const authenticators = await getAuthenticators(subdomain);
         
-        return ctx.render({ subdomain, wallets: walletsWithNames, authenticators, currentAuthenticator: authenticatorName });
+        return ctx.render({ subdomain, wallets: walletsWithNames, authenticators, currentAuthenticator: authenticatorName, security });
       } catch (error) {
         // return Response.redirect("/login");
         const headers = new Headers();
@@ -180,7 +183,7 @@ export const handler: Handlers = {
 }
 
 export default function Subdomain({ data }: PageProps<Data>) {
-  const { subdomain, wallets, error, authenticators, currentAuthenticator } = data;
+  const { subdomain, wallets, error, authenticators, currentAuthenticator, security } = data;
 
   return (
     <>
@@ -204,16 +207,39 @@ export default function Subdomain({ data }: PageProps<Data>) {
 
       </div>
 
-    <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mt-8">
-      {wallets?.length ? wallets.map((wallet) => {
-        return (
-          <form class="" method="post">
-                <input class="hidden" type="hidden" name="symbol" value={wallet.symbol} />
-                  <CoinButton symbol={wallet.symbol} domain={subdomain + ".hiphiptips"} name={wallet.name} generic={wallet.name == "Unknown"} />
-                <button class="w-full text-xl  mt-2 text-center text-red-400 hover:underline hover:italic" type="submit" value="deleteSubdomainWallet" name="submit"><p>delete</p></button>
-              </form>
-        )
-      }) : <p class="text-xl text-center mx-auto col-span-2">there's nothing here yet</p>}
+      <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mt-8">
+        {wallets?.length ? wallets.map((wallet) => {
+          return (
+            <form class="" method="post">
+                  <input class="hidden" type="hidden" name="symbol" value={wallet.symbol} />
+                    <CoinButton symbol={wallet.symbol} domain={subdomain + ".hiphiptips"} name={wallet.name} generic={wallet.name == "Unknown"} />
+                  <button class="w-full text-xl  mt-2 text-center text-red-400 hover:underline hover:italic" type="submit" value="deleteSubdomainWallet" name="submit"><p>delete</p></button>
+                </form>
+          )
+        }) : <p class="text-xl text-center mx-auto col-span-2">there's nothing here yet</p>}
+      </div>
+
+      <div class="max-w-sm mx-auto w-full">
+
+        <h1 class="text-4xl font-bold mt-8">security options</h1>
+
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mt-8">
+        <form method="post" action="/security">
+          <input type="hidden" name="path" value="/account" />
+          <input type="hidden" name="security" value="handshake" />
+          <p class="text-center text-md">most secure</p>
+          <button type="submit" class={`w-full text-xl  mt-2 text-center underline hover:italic ${security === "handshake" ? "text-green-400" : "text-white"}`} value="handshake" name="submit"><p>HNS/DANE</p></button>
+          {security === "handshake" && <p class="text-center text-sm">(active)</p>}
+        </form>
+        <form method="post" action="/security">
+          <input type="hidden" name="path" value="/account" />
+          <input type="hidden" name="security" value="ca" />
+          <p class="text-center text-md">most compatible</p>
+          <button type="submit" class={`w-full text-xl  mt-2 text-center underline hover:italic ${security === "ca" ? "text-green-400" : "text-white"}`} value="ca" name="submit"><p>ICANN/CA</p></button>
+          {security === "ca" && <p class="text-center text-sm">(active)</p>}
+        </form>
       </div>
 
       <NewWallet />

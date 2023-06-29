@@ -1,5 +1,6 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
-import { getAddress } from "../../utils/hip2.ts";
+import { getAddress, isHandshake } from "../../utils/hip2.ts";
+import type { Security } from "../../utils/hip2.ts";
 import { getInfo } from "../../utils/coins.ts";
 // import { getSubdomain } from "../../utils/subdomains.ts";
 import { getSubdomain } from "../../utils/kv.ts";
@@ -24,6 +25,7 @@ interface WalletData {
   color: string | undefined;
   coin: string | undefined;
   subdomain?: string;
+  security: Security;
 }
 
 const blobToBase64 = (blob: Blob) => {
@@ -38,17 +40,34 @@ const blobToBase64 = (blob: Blob) => {
 
 export const handler: Handlers<WalletData> = {
   async GET(req, ctx) {
+    // get token from cookie
+    const headers = req.headers;
+    const cookie = headers.get("cookie");
+    const token = cookie?.split("token=")[1]?.split(";")[0];
+    const security: Security = cookie?.split("security=")[1]?.split(";")[0] as Security ?? "handshake";
+
     const { domain, symbol } = ctx.params;
-    const address = await getAddress(domain, symbol);
+
+    if (isHandshake(domain) && security !== "handshake" && !token) {
+      const headers = new Headers();
+      const reqURL = new URL(req.url);
+      const hostname = reqURL.hostname;
+      const secure = reqURL.protocol === "https:";
+  
+    
+      headers.set("Location", `/@${domain}`);
+      headers.set("Set-Cookie", `security=handshake; Path=/; HttpOnly;${secure && " Secure;"} SameSite=Strict; Domain=.${hostname};`);
+      return new Response(null, {
+        status: 303,
+        headers,
+      });
+    }
+    const address = await getAddress(domain, symbol, security);
 
     const info = await getInfo(symbol);
     const color = info?.color;
     const coin = info?.name;
 
-    // get token from cookie
-    const headers = req.headers;
-    const cookie = headers.get("cookie");
-    const token = cookie?.split("token=")[1]?.split(";")[0];
 
     // if token exists, verify it
     if (token) {
@@ -56,13 +75,13 @@ export const handler: Handlers<WalletData> = {
         const { uuid } = await verifyToken(token);
         const subdomain = await getSubdomain(uuid);
 
-        return ctx.render({ subdomain, domain, symbol, address, color, coin });
+        return ctx.render({ subdomain, domain, symbol, address, color, coin, security });
       } catch (error) {
         console.error(error);
-        return ctx.render({ domain, symbol, address, color, coin });
+        return ctx.render({ domain, symbol, address, color, coin, security });
       }
     } else {
-      return ctx.render({ domain, symbol, address, color, coin });
+      return ctx.render({ domain, symbol, address, color, coin, security });
     }
     
   }
@@ -71,6 +90,7 @@ export const handler: Handlers<WalletData> = {
 export default function Name({ data }: PageProps<WalletData>) {
 
   const twitterDescription = `Send ${data.coin} (${data.symbol}) to ${data.domain}/`;
+  const { security } = data;
 
   return (
     <>
@@ -95,6 +115,12 @@ export default function Name({ data }: PageProps<WalletData>) {
           <Address address={data.address ?? "hello world"} />
         </>) : (<>
           <h3 class="mx-auto text-3xl mt-8 font-medium">No address found</h3>
+          {security === "handshake" ? 
+        <form method="POST" class="mx-auto" action="/security">
+          <input type="hidden" name="path" value={`/@${data.domain}/${data.symbol}`} />
+          <input type="hidden" name="security" value="ca" />
+          <button type="submit" class="mx-auto text-center text-lg mt-8 underline hover:italic"><p>try with CA security (less secure)</p></button>
+        </form> : null}
         </>)}
 
       </div>

@@ -24,7 +24,8 @@ import * as $18 from "./routes/auth/verify-registration.ts";
 import * as $19 from "./routes/index.tsx";
 import * as $20 from "./routes/login.tsx";
 import * as $21 from "./routes/logout.ts";
-import * as $22 from "./routes/signup.tsx";
+import * as $22 from "./routes/security.ts";
+import * as $23 from "./routes/signup.tsx";
 import * as $$0 from "./islands/AddPasskey.tsx";
 import * as $$1 from "./islands/Address.tsx";
 import * as $$2 from "./islands/CoinInput.tsx";
@@ -59,7 +60,8 @@ const manifest = {
     "./routes/index.tsx": $19,
     "./routes/login.tsx": $20,
     "./routes/logout.ts": $21,
-    "./routes/signup.tsx": $22,
+    "./routes/security.ts": $22,
+    "./routes/signup.tsx": $23,
   },
   islands: {
     "./islands/AddPasskey.tsx": $$0,
