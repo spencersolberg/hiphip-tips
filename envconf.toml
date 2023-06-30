@@ -1,0 +1,5 @@
+[[files]]
+template = ".env.example"
+output = ".env"
+allow-empty = []
+force-prompt-on-create = ["HANDSHAKE_PROXY", "DANE_PROXY", "PORT", "HANDSHAKE_DOMAIN", "ICANN_DOMAIN"]

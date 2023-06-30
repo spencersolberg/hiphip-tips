@@ -84,7 +84,7 @@ export default function SignUp({ data }: PageProps<Data>) {
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header />
         
-        <SignUpForm />
+        <SignUpForm><>{Deno.env.get("HANDSHAKE_DOMAIN")}</></SignUpForm>
         
       </div>
     </>

@@ -1,10 +1,12 @@
-import { JSX } from "preact";
+import { JSX, FunctionalComponent } from "preact";
 import { useState } from "preact/hooks";
 import { startAuthentication } from "@simplewebauthn/browser";
 import Error from "../components/Error.tsx";
 
+interface Props {
+}
 
-export default function LogInForm() {
+const LogInForm: FunctionalComponent<Props> = function({ children }) {
   const [subdomain, setSubdomain] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
   const handleChange = ({currentTarget}: JSX.TargetedEvent<HTMLInputElement, Event>) => setSubdomain(currentTarget.value);
@@ -58,7 +60,7 @@ export default function LogInForm() {
           onInput={handleChange}
           autocomplete="username webauthn"
         />
-        <h2 class="mt-9 ml-2 text-2xl">.{Deno.env.get("HANDSHAKE_DOMAIN")}</h2>
+        <h2 class="mt-9 ml-2 text-2xl">.{children}</h2>
       </div>
 
       <div class="max-w-sm mx-auto px-2">
@@ -81,3 +83,5 @@ export default function LogInForm() {
     </form>
   );
 }
+
+export default LogInForm;

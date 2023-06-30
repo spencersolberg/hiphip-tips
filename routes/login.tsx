@@ -55,7 +55,7 @@ export default function Login({ data }: PageProps<Data>) {
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header />
-        <LogInForm />
+        <LogInForm><>{Deno.env.get("HANDSHAKE_DOMAIN")}</></LogInForm>
       </div>
     </>
   )

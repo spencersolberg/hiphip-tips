@@ -1,11 +1,12 @@
-import { JSX } from "preact";
+import { JSX, FunctionalComponent } from "preact";
 import { useState } from "preact/hooks";
 import { startRegistration } from "@simplewebauthn/browser";
 import Error from "../components/Error.tsx";
-import HandshakeDomain from "../components/HandshakeDomain.tsx";
 
+interface Props {
+}
 
-export default function SignUpForm() {
+const SignUpForm: FunctionalComponent<Props> = function({ children }) {
   const [subdomain, setSubdomain] = useState<string | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
   const handleChange = ({currentTarget}: JSX.TargetedEvent<HTMLInputElement, Event>) => setSubdomain(currentTarget.value);
@@ -57,7 +58,7 @@ export default function SignUpForm() {
           autocapitalize="none"
           onInput={handleChange}
         />
-        <h2 class="mt-9 ml-2 text-2xl">.hiphiptips</h2>
+        <h2 class="mt-9 ml-2 text-2xl">.{children}</h2>
       </div>
 
       <div class="max-w-sm mx-auto px-2">
@@ -79,3 +80,5 @@ export default function SignUpForm() {
     </div>
   );
 }
+
+export default SignUpForm;

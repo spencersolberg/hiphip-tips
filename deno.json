@@ -5,7 +5,8 @@
     "test": "deno test --unstable --allow-read --allow-net --allow-env",
     "jwt": "deno run --allow-write tools/jwt.ts",
     "icann": "deno run --allow-net --allow-write tools/icann.ts",
-    "setup": "deno task jwt && deno task icann"
+    "env": "deno run --allow-read --allow-write --allow-env https://deno.land/x/envconf@0.0.4/src/mod.ts",
+    "setup": "deno task jwt && deno task icann && deno task env"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

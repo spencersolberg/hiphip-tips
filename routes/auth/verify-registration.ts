@@ -17,7 +17,7 @@ export const handler = async (
   // const rpID = "hiphiptips";
   const rpID = host;
   const protocol = host === "localhost" ? "http" : "https";
-  const origin = `${protocol}://${rpID}${host === "localhost" ? ":8001" : ""}`;
+  const origin = `${protocol}://${rpID}${host === "localhost" ? `:${Deno.env.get("PORT")}` : ""}`;
   const json = await req.json();
   // console.log(json);
 

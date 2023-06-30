@@ -202,6 +202,15 @@ export default function Subdomain({ data }: PageProps<Data>) {
 
       <Error error={error} />
       <div class="max-w-sm mx-auto w-full">
+        <h1 class="text-4xl font-bold mt-8">your subdomain</h1>
+      </div>
+
+      <div class="max-w-sm mx-auto w-full">
+
+      <p class="text-xl text-center mt-4">your subdomain is <span class="font-bold">{subdomain}.{Deno.env.get("HANDSHAKE_DOMAIN")}</span></p>
+      <p class="text-xl text-center mt-4">it is also accessible at <span class="font-bold">{subdomain}.{Deno.env.get("ICANN_DOMAIN")}</span></p>
+      </div>
+      <div class="max-w-sm mx-auto w-full">
 
         <h1 class="text-4xl font-bold mt-8">your wallets</h1>
 
