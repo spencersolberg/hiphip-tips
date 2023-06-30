@@ -5,7 +5,7 @@ import { getAuthenticators, setChallenge, getUUID } from "../../utils/kv.ts";
 
 export const handler = async (req: Request, _ctx: HandlerContext): Promise<Response> => {
   const host = new URL(req.url).hostname;
-  const rpName = "hiphiptips";
+  const rpName = Deno.env.get("HANDSHAKE_DOMAIN");
   // const rpID = "hiphiptips";
   const rpID = host;
   const origin = `https://${rpID}`;

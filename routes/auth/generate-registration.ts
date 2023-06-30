@@ -43,7 +43,7 @@ export const handler = async (req: Request, _ctx: HandlerContext): Promise<Respo
     attestationType: "none",
     userName: subdomain,
     userID: uuid,
-    userDisplayName: `${subdomain}.hiphiptips`
+    userDisplayName: `${subdomain}.${Deno.env.get("HANDSHAKE_DOMAIN")}`
   });
 
   // store challenge in KV

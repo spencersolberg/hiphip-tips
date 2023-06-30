@@ -12,7 +12,7 @@ export const handler = async (
   _ctx: HandlerContext,
 ): Promise<Response> => {
   const host = new URL(req.url).hostname;
-  const rpName = "hiphiptips";
+  const rpName = Deno.env.get("HANDSHAKE_DOMAIN");
   // const rpID = "hiphiptips";
   const rpID = host;
   const protocol = host === "localhost" ? "http" : "https";

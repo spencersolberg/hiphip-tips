@@ -95,11 +95,11 @@ export default function Name({ data }: PageProps<WalletData>) {
   return (
     <>
       <Head>
-        <title>{data.symbol} | {data.domain} | hiphiptips</title>
+        <title>{data.symbol} | {data.domain} | {Deno.env.get("HANDSHAKE_DOMAIN")}</title>
         <Style />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content={`/@${data.domain}/${data.symbol}`} />
-        <meta name="twitter:title" content={`${data.symbol} | ${data.domain}/ | hiphiptips`} />
+        <meta name="twitter:title" content={`${data.symbol} | ${data.domain}/ | ${Deno.env.get("HANDSHAKE_DOMAIN")}`} />
         <meta name="twitter:description" content={twitterDescription} />
         <meta name="twitter:image" content={`/api/v1/domains/${data.domain}/symbols/${data.symbol}/qrcode`} />
         <meta content="#34D399" name="theme-color" />

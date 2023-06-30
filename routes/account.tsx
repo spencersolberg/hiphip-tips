@@ -188,11 +188,11 @@ export default function Subdomain({ data }: PageProps<Data>) {
   return (
     <>
       <Head>
-        <title>hiphiptips - </title>
+        <title>{Deno.env.get("HANDSHAKE_DOMAIN")} - </title>
         <Style />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="/" />
-        <meta name="twitter:title" content="hiphiptips" />
+        <meta name="twitter:title" content={Deno.env.get("HANDSHAKE_DOMAIN")} />
         <meta name="twitter:description" content="Easily send crypto to domain names" />
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
@@ -212,7 +212,7 @@ export default function Subdomain({ data }: PageProps<Data>) {
           return (
             <form class="" method="post">
                   <input class="hidden" type="hidden" name="symbol" value={wallet.symbol} />
-                    <CoinButton symbol={wallet.symbol} domain={subdomain + ".hiphiptips"} name={wallet.name} generic={wallet.name == "Unknown"} />
+                    <CoinButton symbol={wallet.symbol} domain={subdomain + "." + Deno.env.get("HANDSHAKE_DOMAIN")} name={wallet.name} generic={wallet.name == "Unknown"} />
                   <button class="w-full text-xl  mt-2 text-center text-red-400 hover:underline hover:italic" type="submit" value="deleteSubdomainWallet" name="submit"><p>delete</p></button>
                 </form>
           )
@@ -261,7 +261,7 @@ export default function Subdomain({ data }: PageProps<Data>) {
             spellcheck={false}
             autocapitalize="none"
           />
-          <h2 class="mt-9 ml-2 text-2xl">.hiphiptips</h2>
+          <h2 class="mt-9 ml-2 text-2xl">.{Deno.env.get("HANDSHAKE_DOMAIN")}</h2>
         </div>
          <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-2 text-center border-2 border-black text-white bg-green-400 transition-transform transform-gpu hover:scale-110" type="submit" value="changeSubdomain" name="submit">change</button>
       </form>

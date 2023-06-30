@@ -1,11 +1,13 @@
+import "$std/dotenv/load.ts";
+
 const letsDaneCert = await Deno.readTextFile("letsdane.crt");
 const handshakeClient = Deno.createHttpClient({
   caCerts: [letsDaneCert],
-  proxy: { url: "http://127.0.0.1:8080" },
+  proxy: { url: `http://${Deno.env.get("HANDSHAKE_PROXY")}` },
 });
 const daneClient = Deno.createHttpClient({
   caCerts: [letsDaneCert],
-  proxy: { url: "http://127.0.0.1:8079" },
+  proxy: { url: `http://${Deno.env.get("DANE_PROXY")}` },
 })
 
 export const isHandshake = (name: string): boolean => {

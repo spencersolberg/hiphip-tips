@@ -51,11 +51,11 @@ export default function Home({ data }: PageProps<Data>) {
   return (
     <>
       <Head>
-        <title>hiphiptips</title>
+        <title>{Deno.env.get("HANDSHAKE_DOMAIN")}</title>
         <Style />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="/" />
-        <meta name="twitter:title" content="hiphiptips" />
+        <meta name="twitter:title" content={Deno.env.get("HANDSHAKE_DOMAIN")} />
         <meta
           name="twitter:description"
           content="Easily send crypto to domain names"

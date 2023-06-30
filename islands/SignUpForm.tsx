@@ -2,6 +2,7 @@ import { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { startRegistration } from "@simplewebauthn/browser";
 import Error from "../components/Error.tsx";
+import HandshakeDomain from "../components/HandshakeDomain.tsx";
 
 
 export default function SignUpForm() {

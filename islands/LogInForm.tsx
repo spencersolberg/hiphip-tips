@@ -58,7 +58,7 @@ export default function LogInForm() {
           onInput={handleChange}
           autocomplete="username webauthn"
         />
-        <h2 class="mt-9 ml-2 text-2xl">.hiphiptips</h2>
+        <h2 class="mt-9 ml-2 text-2xl">.{Deno.env.get("HANDSHAKE_DOMAIN")}</h2>
       </div>
 
       <div class="max-w-sm mx-auto px-2">

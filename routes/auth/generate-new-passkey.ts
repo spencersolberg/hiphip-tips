@@ -6,7 +6,7 @@ import { subdomainExists, setChallenge, getUUID } from "../../utils/kv.ts";
 // GET Request with subdomain query parameter
 export const handler = async (req: Request, _ctx: HandlerContext): Promise<Response> => {
   const host = new URL(req.url).hostname;
-  const rpName = "hiphiptips";
+  const rpName = Deno.env.get("HANDSHAKE_DOMAIN")!;
   // const rpID = "hiphiptips";
   const rpID = host;
   const origin = `https://${rpID}`;
@@ -35,7 +35,7 @@ export const handler = async (req: Request, _ctx: HandlerContext): Promise<Respo
     attestationType: "none",
     userName: subdomain,
     userID: uuid,
-    userDisplayName: `${subdomain}.hiphiptips`
+    userDisplayName: `${subdomain}.${Deno.env.get("HANDSHAKE_DOMAIN")}`
   });
 
   // store challenge in KV

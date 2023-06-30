@@ -108,11 +108,11 @@ export default function Name({ data }: PageProps<DomainData | null>) {
   return (
     <>
     <Head>
-      <title>{data.domain} | hiphiptips</title>
+      <title>{data.domain} | {Deno.env.get("HANDSHAKE_DOMAIN")}</title>
       <Style />
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:url" content={`/@${data.domain}`} />
-      <meta name="twitter:title" content={`${data.domain}/ | hiphiptips`} />
+      <meta name="twitter:title" content={`${data.domain}/ | ${Deno.env.get("HANDSHAKE_DOMAIN")}`} />
       <meta name="twitter:description" content={twitterDescription} />
       <meta name="twitter:image" content="/favicon/apple-icon.png" />
       <meta content="#34D399" name="theme-color" />

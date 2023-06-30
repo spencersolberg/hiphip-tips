@@ -44,7 +44,7 @@ export const verifyToken = async (token: string): Promise<Verified> => {
     // console.log({ ...payload, uuid: payload.sub });
     return { ...payload, uuid: payload.sub };
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw new Error("Invalid token");
   }
 }

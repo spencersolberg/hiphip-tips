@@ -38,11 +38,11 @@ export default function About({ data }: PageProps<Data>) {
   return (
     <>
       <Head>
-        <title>about | hiphiptips</title>
+        <title>about | {Deno.env.get("HANDSHAKE_DOMAIN")}</title>
         <Style />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="/" />
-        <meta name="twitter:title" content="hiphiptips" />
+        <meta name="twitter:title" content={Deno.env.get("HANDSHAKE_DOMAIN")} />
         <meta
           name="twitter:description"
           content="Easily send crypto to domain names"
@@ -55,14 +55,14 @@ export default function About({ data }: PageProps<Data>) {
         <div class="flex flex-col max-w-sm mx-auto mt-4">
           <h1 class="text-4xl font-bold">about</h1>
           <p class="text-xl mt-4">
-            hiphiptips is the easiest way to get started with{" "}
+          {Deno.env.get("HANDSHAKE_DOMAIN")} is the easiest way to get started with{" "}
             <a class="underline hover:italic" href="https://github.com/handshake-org/HIPs/blob/master/HIP-0002.md">
               HIP-0002
             </a>, a simple protocol for aliasing wallet addresses with domain
             names
           </p>
           <p class="text-xl mt-4">
-            hiphiptips supports <a class="underline hover:italic" href="https://handshake.org">Handshake</a>
+          {Deno.env.get("HANDSHAKE_DOMAIN")} supports <a class="underline hover:italic" href="https://handshake.org">Handshake</a>
             {" "}
             domains secured through the{" "}
             <a class="underline hover:italic" href="https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">
@@ -71,14 +71,14 @@ export default function About({ data }: PageProps<Data>) {
             protocol
           </p>
           <p class="text-xl mt-4">
-            in addition to the standard HIP-0002 specification, hiphiptips
+            in addition to the standard HIP-0002 specification, {Deno.env.get("HANDSHAKE_DOMAIN")}
             utilizes an experimental <a class="underline hover:italic" href="https://github.com/handshake-org/HIPs/issues/43">available addresses endpoint</a> proposal
           </p>
           <p class="text-xl mt-4">
-            users can provision their own HIP-0002 compliant, DANE secured subdomains by <a class="underline hover:italic" href="/signup">signing up</a> for hiphiptips
+            users can provision their own HIP-0002 compliant, DANE secured subdomains by <a class="underline hover:italic" href="/signup">signing up</a> for {Deno.env.get("HANDSHAKE_DOMAIN")}
           </p>
           <p class="text-xl mt-4">
-            hiphiptips is open source and available on <a class="underline hover:italic" href="https://github.com/spencersolberg/hiphip-tips">GitHub</a>
+          {Deno.env.get("HANDSHAKE_DOMAIN")} is open source and available on <a class="underline hover:italic" href="https://github.com/spencersolberg/hiphip-tips">GitHub</a>
           </p>
         </div>
       </div>

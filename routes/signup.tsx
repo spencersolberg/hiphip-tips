@@ -72,11 +72,11 @@ export default function SignUp({ data }: PageProps<Data>) {
   return (
     <>
       <Head>
-        <title>hiphiptips - signup</title>
+        <title>{Deno.env.get("HANDSHAKE_DOMAIN")} - signup</title>
         <Style />
         <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="/" />
-        <meta name="twitter:title" content="hiphiptips" />
+        <meta name="twitter:title" content={Deno.env.get("HANDSHAKE_DOMAIN")} />
         <meta name="twitter:description" content="Easily send crypto to domain names" />
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
