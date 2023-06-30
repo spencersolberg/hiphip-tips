@@ -52,7 +52,7 @@ export default function About({ data }: PageProps<Data>) {
       </Head>
       <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
         <Header subdomain={data?.subdomain} />
-        <div class="flex flex-col max-w-sm mx-auto mt-4">
+        <div class="flex flex-col max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-4">
           <h1 class="text-4xl font-bold">about</h1>
           <p class="text-xl mt-4">
           {Deno.env.get("HANDSHAKE_DOMAIN")} is the easiest way to get started with{" "}
@@ -76,6 +76,9 @@ export default function About({ data }: PageProps<Data>) {
           </p>
           <p class="text-xl mt-4">
             users can provision their own HIP-0002 compliant, DANE secured subdomains by <a class="underline hover:italic" href="/signup">signing up</a> for {Deno.env.get("HANDSHAKE_DOMAIN")}
+          </p>
+          <p class="text-xl mt-4">
+            {Deno.env.get("HANDSHAKE_DOMAIN")} offers a <a href="/api" class="underline hover:italic">REST API</a> for developers to integrate with
           </p>
           <p class="text-xl mt-4">
           {Deno.env.get("HANDSHAKE_DOMAIN")} is open source and available on <a class="underline hover:italic" href="https://github.com/spencersolberg/hiphip-tips">GitHub</a>

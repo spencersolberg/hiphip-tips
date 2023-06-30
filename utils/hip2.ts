@@ -40,8 +40,12 @@ const getHandshakeSymbols = async (name: string): Promise<string[]> => {
   const url = `${protocol}://${name}/.well-known/wallets`;
 
   try {
-    const res = await fetch(url, { client: handshakeClient}).then((res) => res.text());
-    return parseText(res);
+    const res = await fetch(url, { client: handshakeClient});
+    if (!res.ok) {
+      return [];
+    }
+    const text = await res.text();
+    return parseText(text);
   } catch (error) {
     // console.error(error);
     return [];
@@ -57,8 +61,12 @@ const getHandshakeAddress = async (name: string, symbol: string): Promise<string
   const url = `${protocol}://${name}/.well-known/wallets/${symbol.toUpperCase()}`;
 
   try {
-    const res = await fetch(url, { client: handshakeClient }).then((res) => res.text());
-    return res.trim();
+    const res = await fetch(url, { client: handshakeClient });
+    if (!res.ok) {
+      return undefined;
+    }
+    const text = await res.text();
+    return text.trim();
   } catch (error) {
     // console.error(error);
     return undefined;
@@ -66,16 +74,17 @@ const getHandshakeAddress = async (name: string, symbol: string): Promise<string
 }
 
 const getDaneSymbols = async (name: string): Promise<string[]> => {
-  Deno.env.set("DENO_TLS_CA_STORE", "none");
   const url = `https://${name}/.well-known/wallets`;
   
   try {
-    const res = await fetch(url, { client: daneClient }).then((res) => res.text());
-    Deno.env.set("DENO_TLS_CA_STORE", "mozilla");
-    return parseText(res);
+    const res = await fetch(url, { client: daneClient });
+    if (!res.ok) {
+      return [];
+    }
+    const text = await res.text();
+    return parseText(text);
   } catch (error) {
     // console.error(error);
-    Deno.env.set("DENO_TLS_CA_STORE", "mozilla");
     return [];
   }
 }
@@ -84,8 +93,12 @@ const getDaneAddress = async (name: string, symbol: string): Promise<string | un
   const url = `https://${name}/.well-known/wallets/${symbol.toUpperCase()}`;
 
   try {
-    const res = await fetch(url, { client: daneClient }).then((res) => res.text());
-    return res.trim();
+    const res = await fetch(url, { client: daneClient });
+    if (!res.ok) {
+      return undefined;
+    }
+    const text = await res.text();
+    return text.trim();
   } catch (error) {
     // console.error(error);
     return undefined;
@@ -96,8 +109,12 @@ const getCaSymbols = async (name: string): Promise<string[]> => {
   const url = `https://${name}/.well-known/wallets`;
 
   try {
-    const res = await fetch(url).then((res) => res.text());
-    return parseText(res);
+    const res = await fetch(url);
+    if (!res.ok) {
+      return [];
+    }
+    const text = await res.text();
+    return parseText(text);
   } catch (error) {
     // console.error(error);
     return [];
@@ -108,8 +125,12 @@ const getCaAddress = async (name: string, symbol: string): Promise<string | unde
   const url = `https://${name}/.well-known/wallets/${symbol.toUpperCase()}`;
 
   try {
-    const res = await fetch(url).then((res) => res.text());
-    return res.trim();
+    const res = await fetch(url);
+    if (!res.ok) {
+      return undefined;
+    }
+    const text = await res.text();
+    return text.trim();
   } catch (error) {
     // console.error(error);
     return undefined;

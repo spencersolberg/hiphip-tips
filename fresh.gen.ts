@@ -8,24 +8,23 @@ import * as $2 from "./routes/@[domain].tsx";
 import * as $3 from "./routes/@[domain]/[symbol].tsx";
 import * as $4 from "./routes/about.tsx";
 import * as $5 from "./routes/account.tsx";
-import * as $6 from "./routes/api/joke.ts";
-import * as $7 from "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts";
-import * as $8 from "./routes/api/v1/subdomains.ts";
-import * as $9 from "./routes/api/v1/subdomains/[subdomain].ts";
-import * as $10 from "./routes/api/v1/subdomains/[subdomain]/wallets.ts";
-import * as $11 from "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts";
-import * as $12 from "./routes/auth/generate-authentication.ts";
-import * as $13 from "./routes/auth/generate-new-passkey.ts";
-import * as $14 from "./routes/auth/generate-registration.ts";
-import * as $15 from "./routes/auth/set-token.ts";
-import * as $16 from "./routes/auth/verify-authentication.ts";
-import * as $17 from "./routes/auth/verify-new-passkey.ts";
-import * as $18 from "./routes/auth/verify-registration.ts";
-import * as $19 from "./routes/index.tsx";
-import * as $20 from "./routes/login.tsx";
-import * as $21 from "./routes/logout.ts";
-import * as $22 from "./routes/security.ts";
-import * as $23 from "./routes/signup.tsx";
+import * as $6 from "./routes/api.tsx";
+import * as $7 from "./routes/api/joke.ts";
+import * as $8 from "./routes/api/v1/domains/[domain]/symbols.ts";
+import * as $9 from "./routes/api/v1/domains/[domain]/symbols/[symbol].ts";
+import * as $10 from "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts";
+import * as $11 from "./routes/auth/generate-authentication.ts";
+import * as $12 from "./routes/auth/generate-new-passkey.ts";
+import * as $13 from "./routes/auth/generate-registration.ts";
+import * as $14 from "./routes/auth/set-token.ts";
+import * as $15 from "./routes/auth/verify-authentication.ts";
+import * as $16 from "./routes/auth/verify-new-passkey.ts";
+import * as $17 from "./routes/auth/verify-registration.ts";
+import * as $18 from "./routes/index.tsx";
+import * as $19 from "./routes/login.tsx";
+import * as $20 from "./routes/logout.ts";
+import * as $21 from "./routes/security.ts";
+import * as $22 from "./routes/signup.tsx";
 import * as $$0 from "./islands/AddPasskey.tsx";
 import * as $$1 from "./islands/Address.tsx";
 import * as $$2 from "./islands/CoinInput.tsx";
@@ -44,24 +43,23 @@ const manifest = {
     "./routes/@[domain]/[symbol].tsx": $3,
     "./routes/about.tsx": $4,
     "./routes/account.tsx": $5,
-    "./routes/api/joke.ts": $6,
-    "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts": $7,
-    "./routes/api/v1/subdomains.ts": $8,
-    "./routes/api/v1/subdomains/[subdomain].ts": $9,
-    "./routes/api/v1/subdomains/[subdomain]/wallets.ts": $10,
-    "./routes/api/v1/subdomains/[subdomain]/wallets/[symbol].ts": $11,
-    "./routes/auth/generate-authentication.ts": $12,
-    "./routes/auth/generate-new-passkey.ts": $13,
-    "./routes/auth/generate-registration.ts": $14,
-    "./routes/auth/set-token.ts": $15,
-    "./routes/auth/verify-authentication.ts": $16,
-    "./routes/auth/verify-new-passkey.ts": $17,
-    "./routes/auth/verify-registration.ts": $18,
-    "./routes/index.tsx": $19,
-    "./routes/login.tsx": $20,
-    "./routes/logout.ts": $21,
-    "./routes/security.ts": $22,
-    "./routes/signup.tsx": $23,
+    "./routes/api.tsx": $6,
+    "./routes/api/joke.ts": $7,
+    "./routes/api/v1/domains/[domain]/symbols.ts": $8,
+    "./routes/api/v1/domains/[domain]/symbols/[symbol].ts": $9,
+    "./routes/api/v1/domains/[domain]/symbols/[symbol]/qrcode.ts": $10,
+    "./routes/auth/generate-authentication.ts": $11,
+    "./routes/auth/generate-new-passkey.ts": $12,
+    "./routes/auth/generate-registration.ts": $13,
+    "./routes/auth/set-token.ts": $14,
+    "./routes/auth/verify-authentication.ts": $15,
+    "./routes/auth/verify-new-passkey.ts": $16,
+    "./routes/auth/verify-registration.ts": $17,
+    "./routes/index.tsx": $18,
+    "./routes/login.tsx": $19,
+    "./routes/logout.ts": $20,
+    "./routes/security.ts": $21,
+    "./routes/signup.tsx": $22,
   },
   islands: {
     "./islands/AddPasskey.tsx": $$0,
