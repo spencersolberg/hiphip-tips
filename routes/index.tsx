@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 // import { getSubdomain } from "../utils/subdomains.ts";
@@ -63,7 +64,7 @@ export default function Home({ data }: PageProps<Data>) {
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header subdomain={subdomain} />
         <form class="mx-auto w-full flex flex-col max-w-sm" method="post">
           <input
@@ -83,6 +84,7 @@ export default function Home({ data }: PageProps<Data>) {
             </button>
           </div>
         </form>
+        <Footer />
       </div>
     </>
   );

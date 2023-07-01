@@ -10,6 +10,7 @@ import QRCode from "../../islands/QRCode.tsx";
 import { Head } from "$fresh/runtime.ts";
 import Style from "../../components/Style.tsx";
 import Header from "../../components/Header.tsx";
+import Footer from "../../components/Footer.tsx";
 
 import Address from "../../islands/Address.tsx";
 import { RouteConfig } from "$fresh/server.ts";
@@ -104,7 +105,7 @@ export default function Name({ data }: PageProps<WalletData>) {
         <meta name="twitter:image" content={`/api/v1/domains/${data.domain}/symbols/${data.symbol}/qrcode`} />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header subdomain={data.subdomain} />
         <a href={`/@${data.domain}`} class="text-2xl font-bold mx-auto mt-8">{data.domain}</a>
         { data.address ? (<>
@@ -122,6 +123,8 @@ export default function Name({ data }: PageProps<WalletData>) {
           <button type="submit" class="mx-auto text-center text-lg mt-8 underline hover:italic"><p>try with CA security (less secure)</p></button>
         </form> : null}
         </>)}
+
+        <Footer />
 
       </div>
     </>

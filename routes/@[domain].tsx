@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
@@ -117,7 +118,7 @@ export default function Name({ data }: PageProps<DomainData | null>) {
       <meta name="twitter:image" content="/favicon/apple-icon.png" />
       <meta content="#34D399" name="theme-color" />
     </Head>
-    <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+    <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
       <Header subdomain={subdomain} />
       <h2 class="text-4xl font-bold mx-auto mt-8">{data.domain}</h2>
       {data.coins.length > 0 ? (<>
@@ -142,6 +143,7 @@ export default function Name({ data }: PageProps<DomainData | null>) {
 
       <CoinInput domain={data.domain} />
 
+      <Footer />
       </div>
     </>
   )

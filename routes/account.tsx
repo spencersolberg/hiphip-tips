@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 import CoinButton from "../components/CoinButton.tsx";
 import Error from "../components/Error.tsx";
 import { getName } from "../utils/coins.ts";
@@ -197,7 +198,7 @@ export default function Subdomain({ data }: PageProps<Data>) {
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header subdomain={subdomain} />
 
       <Error error={error} />
@@ -305,6 +306,7 @@ export default function Subdomain({ data }: PageProps<Data>) {
         <a href="/logout" class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-4 text-center border-2 border-black text-white bg-yellow-400 transition-transform transform-gpu hover:scale-110">logout</a>
         <button class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 mt-2 text-center border-2 border-black text-white bg-red-400 transition-transform transform-gpu hover:scale-110" type="submit" value="deleteSubdomain" name="submit">delete account</button>
       </form>
+      <Footer />
       </div>
     </>
   )

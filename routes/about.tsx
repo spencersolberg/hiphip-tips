@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 
 // import { getSubdomain } from "../utils/subdomains.ts";
 import { getSubdomain } from "../utils/kv.ts";
@@ -50,7 +51,7 @@ export default function About({ data }: PageProps<Data>) {
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header subdomain={data?.subdomain} />
         <div class="flex flex-col max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-4">
           <h1 class="text-4xl font-bold">about</h1>
@@ -72,7 +73,7 @@ export default function About({ data }: PageProps<Data>) {
           </p>
           <p class="text-xl mt-4">
             in addition to the standard HIP-0002 specification, {Deno.env.get("HANDSHAKE_DOMAIN")}
-            utilizes an experimental <a class="underline hover:italic" href="https://github.com/handshake-org/HIPs/issues/43">available addresses endpoint</a> proposal
+            {" "}utilizes an experimental <a class="underline hover:italic" href="https://github.com/handshake-org/HIPs/issues/43">available addresses endpoint</a> proposal
           </p>
           <p class="text-xl mt-4">
             users can provision their own HIP-0002 compliant, DANE secured subdomains by <a class="underline hover:italic" href="/signup">signing up</a> for {Deno.env.get("HANDSHAKE_DOMAIN")}
@@ -84,6 +85,7 @@ export default function About({ data }: PageProps<Data>) {
           {Deno.env.get("HANDSHAKE_DOMAIN")} is open source and available on <a class="underline hover:italic" href="https://github.com/spencersolberg/hiphip-tips">GitHub</a>
           </p>
         </div>
+        <Footer />
       </div>
     </>
   );

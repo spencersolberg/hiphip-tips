@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 import { getSubdomain } from "../utils/subdomains.ts";
 import LogInForm from "../islands/LogInForm.tsx";
 
@@ -53,9 +54,10 @@ export default function Login({ data }: PageProps<Data>) {
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header />
         <LogInForm><>{Deno.env.get("HANDSHAKE_DOMAIN")}</></LogInForm>
+        <Footer />
       </div>
     </>
   )

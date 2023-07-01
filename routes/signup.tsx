@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 import Key from "../islands/Key.tsx";
 import SignUpForm from "../islands/SignUpForm.tsx";
 import { JSX } from "preact";
@@ -81,11 +82,12 @@ export default function SignUp({ data }: PageProps<Data>) {
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header />
         
         <SignUpForm><>{Deno.env.get("HANDSHAKE_DOMAIN")}</></SignUpForm>
         
+        <Footer />
       </div>
     </>
   );

@@ -1,6 +1,7 @@
 import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
+import Footer from "../components/Footer.tsx";
 
 // import { getSubdomain } from "../utils/subdomains.ts";
 import { getSubdomain } from "../utils/kv.ts";
@@ -50,7 +51,7 @@ export default function About({ data }: PageProps<Data>) {
         <meta name="twitter:image" content="/favicon/apple-icon.png" />
         <meta content="#34D399" name="theme-color" />
       </Head>
-      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white">
+      <div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
         <Header subdomain={data?.subdomain} />
         <div class="flex flex-col max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-4">
           <h1 class="text-5xl font-bold">api</h1>
@@ -171,6 +172,7 @@ export default function About({ data }: PageProps<Data>) {
             {`=> {"address":"hs1...."}`}
           </p>
         </div>
+        <Footer />
       </div>
     </>
   );
