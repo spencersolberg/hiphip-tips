@@ -62,6 +62,4 @@ export const handler = async (req: Request, _ctx: HandlerContext): Promise<Respo
       return new Response(null, { status: 404 });
     }
   }
-
-  return new Response(null, { status: 404 });
-};
+}
