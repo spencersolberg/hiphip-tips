@@ -27,6 +27,7 @@ import * as $21 from "./routes/login.tsx";
 import * as $22 from "./routes/logout.ts";
 import * as $23 from "./routes/security.ts";
 import * as $24 from "./routes/signup.tsx";
+import * as $25 from "./routes/sync.ts";
 import * as $$0 from "./islands/AddPasskey.tsx";
 import * as $$1 from "./islands/Address.tsx";
 import * as $$2 from "./islands/CoinInput.tsx";
@@ -66,6 +67,7 @@ const manifest = {
     "./routes/logout.ts": $22,
     "./routes/security.ts": $23,
     "./routes/signup.tsx": $24,
+    "./routes/sync.ts": $25,
   },
   islands: {
     "./islands/AddPasskey.tsx": $$0,

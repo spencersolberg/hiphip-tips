@@ -21,6 +21,7 @@ import {
   renameAuthenticator,
 } from "../utils/kv.ts";
 import { verifyToken } from "../utils/jwt.ts";
+import { isHandshake } from "../utils/hip2.ts";
 
 import type { NamedAuthenticatorDevice } from "../utils/kv.ts";
 import type { Security } from "../utils/hip2.ts";
@@ -32,6 +33,7 @@ interface Data {
   authenticators?: NamedAuthenticatorDevice[];
   currentAuthenticator?: string;
   security: Security;
+  currentDomain: "handshake" | "icann";
 }
 
 interface walletsWithNames {
@@ -42,12 +44,17 @@ interface walletsWithNames {
 
 export const handler: Handlers = {
   async GET(req, ctx) {
+    
     // get token from cookie
     const headers = req.headers;
     const cookie = headers.get("cookie");
     const token = cookie?.split("token=")[1]?.split(";")[0];
     const security = cookie?.split("security=")[1]?.split(";")[0] as Security ??
       "handshake";
+
+    const reqURL = new URL(req.url);
+    const domain = reqURL.hostname;
+    const currentDomain = isHandshake(domain) ? "handshake" : "icann";
 
     // if token exists, verify it
     if (token) {
@@ -75,6 +82,7 @@ export const handler: Handlers = {
           authenticators,
           currentAuthenticator: authenticatorName,
           security,
+          currentDomain
         });
       } catch (error) {
         // return Response.redirect("/login");
@@ -202,6 +210,7 @@ export const handler: Handlers = {
 };
 
 export default function Subdomain({ data }: PageProps<Data>) {
+  const { HANDSHAKE_DOMAIN, ICANN_DOMAIN } = Deno.env.toObject();
   const {
     subdomain,
     wallets,
@@ -209,6 +218,7 @@ export default function Subdomain({ data }: PageProps<Data>) {
     authenticators,
     currentAuthenticator,
     security,
+    currentDomain
   } = data;
 
   return (
@@ -418,6 +428,14 @@ export default function Subdomain({ data }: PageProps<Data>) {
           <AddPasskey subdomain={subdomain} />
         </div>
 
+        <div class="max-w-sm mx-auto w-full mt-8">
+          <a href="/sync" class="underline hover:italic text-2xl text-center">
+            <p>sync</p>
+          </a>
+          <p class="mt-2">
+            this link will sync your session from {currentDomain === "handshake" ? HANDSHAKE_DOMAIN : ICANN_DOMAIN } to {currentDomain === "handshake" ? ICANN_DOMAIN : HANDSHAKE_DOMAIN}
+          </p>
+        </div>
         <form class="mx-auto w-full flex flex-col max-w-sm mt-2" method="post">
           <a
             href="/logout"
