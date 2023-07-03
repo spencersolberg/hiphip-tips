@@ -13,3 +13,4 @@ certificates/*.key
 certificates/*.crt
 certificates/*.cnf
 caddyfiles/*.caddyfile
+.Caddyfile
