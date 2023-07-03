@@ -3,16 +3,16 @@ export default function Footer() {
     <div class="flex justify-between items-center mt-auto w-full px-4 pt-8 text-white">
       <div class="flex-col flex lg:flex-row">
         <a class="lg:pr-4 underline hover:italic" href="/">
-          <p>Home</p>
+          <p>home</p>
         </a>
         <a class="lg:px-4 underline hover:italic" href="/about">
-          <p>About</p>
+          <p>about</p>
         </a>
         <a class="lg:px-4 underline hover:italic" href="/api">
-          <p>API</p>
+          <p>api</p>
         </a>
         <a class="lg:px-4 underline hover:italic" href="/account">
-          <p>Account</p>
+          <p>account</p>
         </a>
       </div>
       <div class="flex flex-col lg:flex-row text-right lg:text-left">

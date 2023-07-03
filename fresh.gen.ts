@@ -20,20 +20,24 @@ import * as $14 from "./routes/auth/set-token.ts";
 import * as $15 from "./routes/auth/verify-authentication.ts";
 import * as $16 from "./routes/auth/verify-new-passkey.ts";
 import * as $17 from "./routes/auth/verify-registration.ts";
-import * as $18 from "./routes/index.tsx";
-import * as $19 from "./routes/login.tsx";
-import * as $20 from "./routes/logout.ts";
-import * as $21 from "./routes/security.ts";
-import * as $22 from "./routes/signup.tsx";
+import * as $18 from "./routes/domains.tsx";
+import * as $19 from "./routes/domains/[domainName].tsx";
+import * as $20 from "./routes/index.tsx";
+import * as $21 from "./routes/login.tsx";
+import * as $22 from "./routes/logout.ts";
+import * as $23 from "./routes/security.ts";
+import * as $24 from "./routes/signup.tsx";
 import * as $$0 from "./islands/AddPasskey.tsx";
 import * as $$1 from "./islands/Address.tsx";
 import * as $$2 from "./islands/CoinInput.tsx";
 import * as $$3 from "./islands/Counter.tsx";
 import * as $$4 from "./islands/Key.tsx";
 import * as $$5 from "./islands/LogInForm.tsx";
-import * as $$6 from "./islands/NewWallet.tsx";
-import * as $$7 from "./islands/QRCode.tsx";
-import * as $$8 from "./islands/SignUpForm.tsx";
+import * as $$6 from "./islands/Message.tsx";
+import * as $$7 from "./islands/NewWallet.tsx";
+import * as $$8 from "./islands/QRCode.tsx";
+import * as $$9 from "./islands/SignUpForm.tsx";
+import * as $$10 from "./islands/VerifySignatureForm.tsx";
 
 const manifest = {
   routes: {
@@ -55,11 +59,13 @@ const manifest = {
     "./routes/auth/verify-authentication.ts": $15,
     "./routes/auth/verify-new-passkey.ts": $16,
     "./routes/auth/verify-registration.ts": $17,
-    "./routes/index.tsx": $18,
-    "./routes/login.tsx": $19,
-    "./routes/logout.ts": $20,
-    "./routes/security.ts": $21,
-    "./routes/signup.tsx": $22,
+    "./routes/domains.tsx": $18,
+    "./routes/domains/[domainName].tsx": $19,
+    "./routes/index.tsx": $20,
+    "./routes/login.tsx": $21,
+    "./routes/logout.ts": $22,
+    "./routes/security.ts": $23,
+    "./routes/signup.tsx": $24,
   },
   islands: {
     "./islands/AddPasskey.tsx": $$0,
@@ -68,9 +74,11 @@ const manifest = {
     "./islands/Counter.tsx": $$3,
     "./islands/Key.tsx": $$4,
     "./islands/LogInForm.tsx": $$5,
-    "./islands/NewWallet.tsx": $$6,
-    "./islands/QRCode.tsx": $$7,
-    "./islands/SignUpForm.tsx": $$8,
+    "./islands/Message.tsx": $$6,
+    "./islands/NewWallet.tsx": $$7,
+    "./islands/QRCode.tsx": $$8,
+    "./islands/SignUpForm.tsx": $$9,
+    "./islands/VerifySignatureForm.tsx": $$10,
   },
   baseUrl: import.meta.url,
 };

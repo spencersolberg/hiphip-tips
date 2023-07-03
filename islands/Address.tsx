@@ -1,7 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
 
 export default function Address(props: { address: string }) {
-  const {  address } = props;
+  const { address } = props;
 
   const [addressDisplay, setAddressDisplay] = useState<string>(address);
   const [javascript, setJavascript] = useState<boolean>(false);

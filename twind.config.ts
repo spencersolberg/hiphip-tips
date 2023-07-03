@@ -31,6 +31,9 @@ export default {
     },
     p: {
       fontFamily: "Courier New"
+    },
+    pre: {
+      fontFamily: "Courier New"
     }
   })
 } as Options;

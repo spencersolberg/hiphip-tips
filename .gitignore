@@ -9,3 +9,7 @@ letsdane.crt
 jwt.key
 jwt.key.pub
 jwks.json
+certificates/*.key
+certificates/*.crt
+certificates/*.cnf
+caddyfiles/*.caddyfile

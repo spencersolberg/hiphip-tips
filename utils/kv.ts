@@ -1,6 +1,9 @@
 import type { AuthenticatorDevice } from "@simplewebauthn/typescript-types";
 import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import { generateSlug, RandomWordOptions, totalUniqueSlugs } from "random-word-slugs"
+import { isHandshake } from "./hip2.ts";
+import { verifyMessage } from "./hsd.ts";
+import { createZone, deleteZone } from "./pdns.ts";
 
 export interface Subdomain {
   uuid: string;
@@ -15,6 +18,24 @@ export interface Wallet {
 export interface NamedAuthenticatorDevice extends AuthenticatorDevice {
   name: string;
 }
+
+export interface Domain {
+  type: "handshake" | "icann";
+  signable: boolean;
+  name: string;
+  verified: boolean;
+  setup: boolean;
+  message: string;
+  signature?: string;
+  verificationRecord: DNSRecord;
+  setupRecords?: DNSRecord[];
+}
+
+export interface DNSRecord {
+  type: "NS" | "DS" | "TXT";
+  data: string;
+}
+
 
 const kv = await Deno.openKv();
 
@@ -301,3 +322,158 @@ export const addAuthenticator = async (uuid: string, authenticator: Authenticato
   await kv.set(["authenticators", uuid], authenticators);
 }
 
+export const validateDomain = async (domain: string, uuid: string): Promise<Domain> => {
+  if (!isHandshake(domain)) {
+    throw new Error("only Handshake domains are supported right now");
+  }
+  // if domain is not TLD, throw error
+  if (domain.split(".").length > 1) {
+    throw new Error("only TLDs are supported right now");
+  }
+
+  // if domain longer than 63 characters, throw error
+  if (domain.length > 63) {
+    throw new Error("domain too long");
+  }
+
+  // if domain has characters other than a-z, -, or 0-9, throw error
+  if (!/^[a-z0-9-]+$/.test(domain)) {
+    throw new Error("domain contains invalid characters");
+  }
+
+  // if domain already exists in ["domains", uuid], throw error
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+  // loop through domains and check if domain exists
+  if (res.value) {
+    const domains = res.value;
+    const index = domains.findIndex((domainObj) => domainObj.name === domain);
+    if (index !== -1) {
+      throw new Error("domain already exists");
+    }
+  }
+
+  // if domain is verified from another account, throw error
+  const iter = await kv.list<Domain[]>({ prefix: ["domains"]});
+  for await (const { key, value } of iter) {
+    // loop through value (domains) and check if domain matches AND is verified
+    if (value) {
+      const index = value.findIndex((domainObj) => domainObj.name === domain && domainObj.verified);
+      if (index !== -1 && key[1] !== uuid) {
+        throw new Error("domain already verified from another account");
+      }
+    }
+  }
+
+  const newDomain: Domain = {
+    name: domain,
+    verified: false,
+    setup: false,
+    type: "handshake",
+    signable: true,
+    message: `${Deno.env.get("HANDSHAKE_DOMAIN")}/ ${uuid}`,
+    verificationRecord: {
+      type: "TXT",
+      data: `${Deno.env.get("HANDSHAKE_DOMAIN")}/ ${uuid}`,
+    }
+  }
+
+  return newDomain;
+}
+
+export const createDomain = async (domain: Domain, uuid: string): Promise<void> => {
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+  const domains = res.value ?? [];
+  domains.push(domain);
+  await kv.set(["domains", uuid], domains);
+}
+
+export const getDomains = async (uuid: string): Promise<Domain[]> => {
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+
+  return res.value || [];
+}
+
+export const getDomain = async (uuid: string, domainName: string): Promise<Domain> => {
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+  const domains = res.value ?? [];
+  const domain = domains.find(d => d.name === domainName);
+
+  if (!domain) {
+    throw new Error(`no domain ${domainName} for uuid ${uuid}`)
+  }
+
+  return domain;
+}
+
+export const verifyDomainWithSignature = async (uuid: string, domainName: string, signature: string): Promise<Domain> => {
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+  const domains = res.value;
+  if (!domains) {
+    throw new Error(`no domains found for uuid ${uuid}`);
+  }
+
+  const domain = domains.find(d => d.name === domainName && !d.verified);
+
+  if (!domain) {
+    throw new Error(`domain ${domainName} is already verified or does not exist`);
+  }
+
+  const verified = await verifyMessage(domainName, domain.message, signature);
+
+  if (!verified) {
+    throw new Error(`invalid signature`);
+  }
+
+  const filteredDomains = domains.filter(d => d.name !== domainName);
+
+  const setupRecords = await createZone(domainName);
+
+  const newDomain: Domain = {
+    ...domain,
+    verified,
+    signature,
+    setupRecords
+  }
+
+  await kv.set(["domains", uuid], [...filteredDomains, newDomain ]);
+
+  return newDomain;
+}
+
+export const removeDomain = async (uuid: string, domainName: string): Promise<void> => {
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+  const domains = res.value ?? [];
+  const filteredDomains = domains.filter(d => d.name !== domainName);
+
+  const deletedDomain = domains.find(d => d.name === domainName);
+
+  if (deletedDomain!.verified) {
+    await deleteZone(domainName);
+  }
+
+  await kv.set(["domains", uuid], filteredDomains);
+}
+
+type OwnerFormat = "uuid" | "subdomain"
+
+export const getOwnerOfDomain = async (domainName: string, format: OwnerFormat = "uuid"): Promise<string> => {
+  const iter = await kv.list<Domain[]>({ prefix: ["domains"]});
+  let uuid: string | undefined = undefined;
+  for await (const { key: [_, _uuid], value } of iter) {
+    const domain = value.find(d => d.name === domainName && d.verified);
+    if (domain) {
+      uuid = _uuid as string;
+    }
+  }
+
+  if (!uuid) {
+    throw new Error(`no owner found for domain ${domainName}`);
+  }
+
+  if (format === "uuid") {
+    return uuid;
+  } else {
+    const subdomain = await getSubdomain(uuid);
+    return subdomain;
+  }
+}

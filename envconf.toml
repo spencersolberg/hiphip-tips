@@ -1,5 +1,5 @@
 [[files]]
 template = ".env.example"
 output = ".env"
-allow-empty = []
-force-prompt-on-create = ["HANDSHAKE_PROXY", "DANE_PROXY", "PORT", "HANDSHAKE_DOMAIN", "ICANN_DOMAIN"]
+allow-empty = ["HSD_API_KEY", "PDNS_API_KEY"]
+force-prompt-on-create = ["HANDSHAKE_PROXY", "DANE_PROXY", "PORT", "HANDSHAKE_DOMAIN", "ICANN_DOMAIN", "HSD_HOST", "HSD_PORT", "HSD_API_KEY", "PDNS_URL", "PDNS_API_KEY", "PUBLIC_IP"]
