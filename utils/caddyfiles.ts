@@ -10,7 +10,7 @@ export const generateCaddyfile = async (domain: string): Promise<void> => {
     tls ${cwd}/certificates/${domain}.crt ${cwd}/certificates/${domain}.key
     route {
       reverse_proxy /.well-known/* localhost:8001
-      redir * https://{$SITE_DOMAIN:${siteDomain}}{uri}
+      redir * https://{$SITE_DOMAIN:${siteDomain}}/@${domain}
     }
   }
   `;
