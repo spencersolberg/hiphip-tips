@@ -1,6 +1,8 @@
 # hiphiptips
 
-### Usage
+### usage
+
+you will need digg, caddy, powerdns, openssl, and deno installed
 
 ```bash
 git clone https://github.com/spencersolberg/hiphip-tips.git

@@ -1,0 +1,32 @@
+import dig from "npm:node-dig-dns";
+import type { DNSRecord } from "./kv.ts";
+
+export const getRecords = async (domain: string): Promise<DNSRecord[]> => {
+  const { HNSD_HOST, HNSD_PORT } = Deno.env.toObject();
+
+  const args = [
+    `@${HNSD_HOST}`,
+    "-p", `${HNSD_PORT}`,
+    "+dnssec",
+    "+short",
+    domain
+  ]
+
+  const nsCmd = new Deno.Command("dig", { args: [...args, "NS"] });
+  const dsCmd = new Deno.Command("dig", { args: [...args, "DS" ]});
+
+  const outputs = await Promise.all([ nsCmd.output(), dsCmd.output() ]);
+
+  const records: DNSRecord[] = [
+    {
+      type: "NS",
+      data: new TextDecoder().decode(outputs[0].stdout).trim().split("\n")[0]
+    },
+    {
+      type: "DS",
+      data: new TextDecoder().decode(outputs[1].stdout).trim().split("\n")[0].toLowerCase()
+    }
+  ]
+
+  return records;
+}

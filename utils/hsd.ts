@@ -6,15 +6,19 @@ const host = Deno.env.get("HSD_HOST") ?? "127.0.0.1";
 const apiKey = Deno.env.get("HSD_API_KEY") ?? null;
 
 const client = new NodeClient({
-  port,
-  host,
-  apiKey,
-})
+	port,
+	host,
+	apiKey,
+});
 
-export const verifyMessage = async (name: string, message: string, signature: string): Promise<boolean> => {
-  return await client.execute("verifymessagewithname", [
-    name,
-    signature,
-    message
-  ]);
-}
+export const verifyMessage = async (
+	name: string,
+	message: string,
+	signature: string,
+): Promise<boolean> => {
+	return await client.execute("verifymessagewithname", [
+		name,
+		signature,
+		message,
+	]);
+};
