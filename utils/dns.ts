@@ -30,3 +30,14 @@ export const getRecords = async (domain: string): Promise<DNSRecord[]> => {
 
   return records;
 }
+
+export const compareRecords = (first: DNSRecord[], second: DNSRecord[]): boolean => {
+  if (first.length !== second.length) return false;
+
+  for (let i = 0; i < first.length; i++) {
+    if (first[i].type !== second[i].type) return false;
+    if (first[i].data !== second[i].data) return false;
+  }
+
+  return true;
+}

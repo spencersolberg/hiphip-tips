@@ -5,9 +5,9 @@ import {
 	getSubdomain,
 	removeDomain,
 	verifyDomainWithSignature,
-	confirmDomainSetup
+	confirmDomainSetup,
 } from "../../utils/kv.ts";
-import { getRecords } from "../../utils/dns.ts";
+import { getRecords, compareRecords } from "../../utils/dns.ts";
 
 import { Head } from "$fresh/runtime.ts";
 import Style from "../../components/Style.tsx";
@@ -123,16 +123,26 @@ export const handler: Handlers = {
 							});
 						}
 						case "checkDomain": {
-							const currentRecords = await getRecords(domainName);
-
-							if (currentRecords !== domain.setupRecords) {
+							if (!domain.setupRecords) {
 								return ctx.render({
 									subdomain,
 									domain,
-									error: `records do not match: ${JSON.stringify(currentRecords, undefined, 4)}`
-									})
-								}
-							
+									error: "no setup records",
+								});
+							}
+							const currentRecords = await getRecords(domainName);
+
+							if (!compareRecords(domain.setupRecords, currentRecords)) {
+								return ctx.render({
+									subdomain,
+									domain,
+									error: `records do not match: ${JSON.stringify(
+										currentRecords,
+										undefined,
+										4,
+									)}`,
+								});
+							}
 
 							try {
 								await confirmDomainSetup(uuid, domainName.toLowerCase());
@@ -258,7 +268,15 @@ export default function DomainName({ data }: PageProps<Data>) {
 						<>
 							<h2 class="text-3xl font-bold mt-4">setup</h2>
 							<p>your domain is configured correctly</p>
-							<p>check it out at <a href={`https://${domain.name}`} class="underline hover:italic">https://{domain.name}/</a></p>
+							<p>
+								check it out at{" "}
+								<a
+									href={`https://${domain.name}`}
+									class="underline hover:italic"
+								>
+									https://{domain.name}/
+								</a>
+							</p>
 						</>
 					)}
 					<form method="post">
