@@ -7,8 +7,8 @@ interface Props {
 
 export default function AddPasskey({ subdomain }: Props) {
 	const addPasskey = async () => {
-		console.log("adding passkey");
-		console.log(subdomain);
+		// console.log("adding passkey");
+		// console.log(subdomain);
 		const generateResponse = await fetch(
 			`/auth/generate-new-passkey?subdomain=${subdomain}`,
 		);

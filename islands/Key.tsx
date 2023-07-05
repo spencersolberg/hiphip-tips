@@ -6,7 +6,7 @@ export default function Key(props: { keyValue: string }) {
 	const [javascript, setJavascript] = useState<boolean>(false);
 
 	useEffect(() => {
-		console.log("key", keyValue);
+		// console.log("key", keyValue);
 
 		setkeyDisplay("•••••••••••••••• 📋");
 		setJavascript(true);

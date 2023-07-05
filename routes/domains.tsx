@@ -72,7 +72,7 @@ export const handler: Handlers = {
 
 					domains = await getDomains(uuid);
 
-					console.log({ subdomain, domain });
+					// console.log({ subdomain, domain });
 
 					return ctx.render({ subdomain, domains });
 				} catch (error) {
