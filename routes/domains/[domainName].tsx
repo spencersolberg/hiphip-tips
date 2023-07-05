@@ -136,7 +136,7 @@ export const handler: Handlers = {
 							});
 						}
 						case "checkDomain": {
-							if (!domain.setupRecords) {
+							if (!domain.nameserverRecords) {
 								return ctx.render({
 									subdomain,
 									domain,
@@ -145,7 +145,7 @@ export const handler: Handlers = {
 							}
 							const currentRecords = await getRecords(domainName);
 
-							if (!compareRecords(domain.setupRecords, currentRecords)) {
+							if (!compareRecords(domain.nameserverRecords, currentRecords)) {
 								return ctx.render({
 									subdomain,
 									domain,
@@ -279,12 +279,12 @@ export default function DomainName({ data }: PageProps<Data>) {
 							</form>
 						</>
 					)}
-					{domain.verified && !domain.setup && domain.setupRecords && (
+					{domain.verified && !domain.setup && domain.signable && domain.nameserverRecords && domain.ipRecords && (
 						<>
 							<h2 class="text-3xl font-bold mt-4">setup</h2>
 							<p>
 								you can setup this domain by adding the following records to
-								your handshake domain
+								your the handshake blockchain
 							</p>
 							<table>
 								<thead>
@@ -295,7 +295,123 @@ export default function DomainName({ data }: PageProps<Data>) {
 									</tr>
 								</thead>
 								<tbody>
-									{domain.setupRecords.map((record) => (
+									{domain.nameserverRecords.map((record) => (
+										<tr class="border-1 border-white">
+											<td class="border-1 border-white px-2 w-16">
+												<p class="text-center">{record.type}</p>
+											</td>
+											<td class="border-1 border-white px-2 w-16">
+                        <p class="text-center">{domain.name}</p>
+                      </td>
+											<td class="break-all border-1 border-white px-2">
+												<p class="text-center">{record.data}</p>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							<form method="post">
+								<button
+									class="w-full max-w-domain text-xl mt-4 text-center underline hover:italic"
+									type="submit"
+									value="checkDomain"
+									name="submit"
+								>
+									<p>check records now</p>
+								</button>
+							</form>
+							<p class="mt-8">
+								if you already have a nameserver set up, you can use these records instead
+							</p>
+							<table>
+								<thead>
+									<tr>
+										<th>type</th>
+										<th>name</th>
+										<th>data</th>
+									</tr>
+								</thead>
+								<tbody>
+									{domain.ipRecords.map((record) => (
+										<tr class="border-1 border-white">
+											<td class="border-1 border-white px-2 w-16">
+												<p class="text-center">{record.type}</p>
+											</td>
+											<td class="border-1 border-white px-2 w-16">
+                        <p class="text-center">{domain.name}</p>
+                      </td>
+											<td class="break-all border-1 border-white px-2">
+												<p class="text-center">{record.data}</p>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							<form method="post">
+								<button
+									class="w-full max-w-domain text-xl mt-4 text-center underline hover:italic"
+									type="submit"
+									value="checkDomainIP"
+									name="submit"
+								>
+									<p>check records now</p>
+								</button>
+							</form>
+						</>
+					)}
+					{domain.verified && !domain.setup && !domain.signable && domain.nameserverRecords && domain.ipRecords && (
+						<>
+							<h2 class="text-3xl font-bold mt-4">setup</h2>
+							<p>
+								add the following records to your nameserver to setup this domain:
+							</p>
+							<table>
+								<thead>
+									<tr>
+										<th>type</th>
+										<th>name</th>
+										<th>data</th>
+									</tr>
+								</thead>
+								<tbody>
+									{domain.ipRecords.map((record) => (
+										<tr class="border-1 border-white">
+											<td class="border-1 border-white px-2 w-16">
+												<p class="text-center">{record.type}</p>
+											</td>
+											<td class="border-1 border-white px-2 w-16">
+                        <p class="text-center">{domain.name}</p>
+                      </td>
+											<td class="break-all border-1 border-white px-2">
+												<p class="text-center">{record.data}</p>
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+							<form method="post">
+								<button
+									class="w-full max-w-domain text-xl mt-4 text-center underline hover:italic"
+									type="submit"
+									value="checkDomainIP"
+									name="submit"
+								>
+									<p>check records now</p>
+								</button>
+							</form>
+							<p class="mt-8">
+								alternatively, you can use our nameserver to setup this domain by adding these records:
+							</p>
+							<table>
+								<thead>
+									<tr>
+										<th>type</th>
+										<th>name</th>
+										<th>data</th>
+									</tr>
+								</thead>
+								<tbody>
+									{domain.nameserverRecords.map((record) => (
 										<tr class="border-1 border-white">
 											<td class="border-1 border-white px-2 w-16">
 												<p class="text-center">{record.type}</p>

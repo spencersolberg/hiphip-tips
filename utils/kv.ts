@@ -33,11 +33,12 @@ export interface Domain {
 	message: string;
 	signature?: string;
 	verificationRecord: DNSRecord;
-	setupRecords?: DNSRecord[];
+	nameserverRecords?: DNSRecord[];
+  ipRecords?: DNSRecord[];
 }
 
 export interface DNSRecord {
-	type: "NS" | "DS" | "TXT";
+	type: "NS" | "DS" | "TXT"| "A" | "TLSA";
 	data: string;
 }
 
@@ -535,7 +536,8 @@ export const verifyDomainWithSignature = async (
 		...domain,
 		verified,
 		signature,
-		setupRecords,
+		nameserverRecords: setupRecords[0],
+    ipRecords: setupRecords[1],
 	};
 
 	await kv.set(["domains", uuid], [...filteredDomains, newDomain]);
@@ -577,7 +579,8 @@ export const verifyDomainWithRecord = async (uuid: string, domainName: string): 
   const newDomain: Domain = {
     ...domain,
     verified,
-    setupRecords,
+    nameserverRecords: setupRecords[0],
+    ipRecords: setupRecords[1]
   };
 
   await kv.set(["domains", uuid], [...filteredDomains, newDomain]);

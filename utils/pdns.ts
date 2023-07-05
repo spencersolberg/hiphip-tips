@@ -16,7 +16,8 @@ const headers = new Headers({
 	"Content-Type": "application/json",
 });
 
-export const createZone = async (domain: string): Promise<DNSRecord[]> => {
+export const createZone = async (domain: string): Promise<DNSRecord[][]> => {
+  const { PUBLIC_IP } = Deno.env.toObject();
 	if (!isHandshake(domain)) {
 		throw new Error("Only Handshake domains are supported");
 	}
@@ -41,7 +42,7 @@ export const createZone = async (domain: string): Promise<DNSRecord[]> => {
 				ttl: 3600,
 				records: [
 					{
-						content: Deno.env.get("PUBLIC_IP"),
+						content: PUBLIC_IP,
 					},
 				],
 			},
@@ -76,7 +77,7 @@ export const createZone = async (domain: string): Promise<DNSRecord[]> => {
 
 	const { ds } = (await res2.json())[0];
 
-	const dnsRecords: DNSRecord[] = [
+	const nsAndDsRecords: DNSRecord[] = [
 		{
 			type: "NS",
 			data: nameserver,
@@ -87,7 +88,18 @@ export const createZone = async (domain: string): Promise<DNSRecord[]> => {
 		},
 	];
 
-	return dnsRecords;
+  const aAndTlsaRecords: DNSRecord[] = [
+    {
+      type: "A",
+      data: PUBLIC_IP,
+    },
+    {
+      type: "TLSA",
+      data: tlsaRecord,
+    }
+  ]
+
+	return [nsAndDsRecords, aAndTlsaRecords];
 };
 
 export const deleteZone = async (domain: string): Promise<void> => {
