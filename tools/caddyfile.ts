@@ -1,10 +1,18 @@
 import "$std/dotenv/load.ts";
 import { exists } from "$std/fs/mod.ts";
 
-const { ICANN_DOMAIN, HANDSHAKE_DOMAIN, PUBLIC_ICANN_CERT_PATH, PRIVATE_ICANN_KEY_PATH, PUBLIC_HANDSHAKE_CERT_PATH, PRIVATE_HANDSHAKE_KEY_PATH, PORT } = Deno.env.toObject();
+const {
+	ICANN_DOMAIN,
+	HANDSHAKE_DOMAIN,
+	PUBLIC_ICANN_CERT_PATH,
+	PRIVATE_ICANN_KEY_PATH,
+	PUBLIC_HANDSHAKE_CERT_PATH,
+	PRIVATE_HANDSHAKE_KEY_PATH,
+	PORT,
+} = Deno.env.toObject();
 
 if (!(await exists(".Caddyfile"))) {
-  const config = `
+	const config = `
   import caddyfiles/*.caddyfile
 
   ${ICANN_DOMAIN} {
@@ -34,5 +42,5 @@ if (!(await exists(".Caddyfile"))) {
   }
   `;
 
-  await Deno.writeTextFile("./.Caddyfile", config);
+	await Deno.writeTextFile("./.Caddyfile", config);
 }

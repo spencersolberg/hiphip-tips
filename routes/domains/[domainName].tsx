@@ -13,7 +13,7 @@ import { Head } from "$fresh/runtime.ts";
 import Style from "../../components/Style.tsx";
 import Header from "../../components/Header.tsx";
 import Footer from "../../components/Footer.tsx";
-import Error from "../../components/Error.tsx";
+import ErrorBox from "../../components/ErrorBox.tsx";
 import Message from "../../islands/Message.tsx";
 import VerifySignatureForm from "../../islands/VerifySignatureForm.tsx";
 import type { Domain } from "../../utils/kv.ts";
@@ -145,12 +145,14 @@ export const handler: Handlers = {
 							}
 
 							try {
-								const newDomain = await confirmDomainSetup(uuid, domainName.toLowerCase());
-								return ctx.render({ subdomain, domain: newDomain })
+								const newDomain = await confirmDomainSetup(
+									uuid,
+									domainName.toLowerCase(),
+								);
+								return ctx.render({ subdomain, domain: newDomain });
 							} catch (err) {
 								return ctx.render({ subdomain, domain, error: err.message });
 							}
-
 						}
 						default: {
 							return ctx.render({ subdomain, domain });
@@ -206,7 +208,7 @@ export default function DomainName({ data }: PageProps<Data>) {
 					<h1 class="text-4xl font-bold">{domain.name}/</h1>
 					<p>{domain.verified ? "✅ verified" : "❌ unverified"}</p>
 
-					<Error error={error} />
+					<ErrorBox error={error} />
 					{!domain.verified && domain.signable && (
 						<>
 							<h2 class="text-3xl font-bold mt-4">verification - signature</h2>

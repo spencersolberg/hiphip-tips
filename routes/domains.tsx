@@ -11,7 +11,7 @@ import { Head } from "$fresh/runtime.ts";
 import Style from "../components/Style.tsx";
 import Header from "../components/Header.tsx";
 import Footer from "../components/Footer.tsx";
-import Error from "../components/Error.tsx";
+import ErrorBox from "../components/ErrorBox.tsx";
 import DomainButton from "../components/DomainButton.tsx";
 import type { Domain } from "../utils/kv.ts";
 
@@ -141,7 +141,7 @@ export default function Domains({ data }: PageProps<Data>) {
 						<DomainButton domain={domain} />
 					))}
 				</div>
-				<Error error={error} />
+				<ErrorBox error={error} />
 				<Footer />
 			</div>
 		</>

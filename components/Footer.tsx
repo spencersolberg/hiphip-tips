@@ -21,12 +21,12 @@ export default function Footer() {
           © {new Date().getFullYear()} <span class="hidden lg:inline  ">|</span>{" "}
         </p>
         <p>
-          <a class="underline hover:italic lg:px-4" href="https://spencersolberg/" target="_blank">
+          <a class="underline hover:italic lg:px-4" href="https://spencersolberg/" target="_blank" rel="noreferrer">
             spencersolberg/
           </a>
         </p>
         <p>
-          <a class="underline hover:italic" href="https://spencersolberg.com" target="_blank">
+          <a class="underline hover:italic" href="https://spencersolberg.com" target="_blank" rel="noreferrer">
             spencersolberg.com
           </a>
         </p>

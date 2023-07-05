@@ -3,7 +3,7 @@ import { isoBase64URL } from "@simplewebauthn/server/helpers";
 import {
 	generateSlug,
 	RandomWordOptions,
-	totalUniqueSlugs,
+	totalUniqueSlugs as _totalUniqueSlugs,
 } from "random-word-slugs";
 import { isHandshake } from "./hip2.ts";
 import { verifyMessage } from "./hsd.ts";
@@ -301,9 +301,7 @@ export const renameAuthenticator = async (
 	oldName: string,
 	newName: string,
 ): Promise<void> => {
-
 	await checkAuthenticatorName(uuid, newName);
-
 
 	const res = await kv.get<NamedAuthenticatorDevice[]>([
 		"authenticators",
@@ -535,33 +533,35 @@ export const verifyDomainWithSignature = async (
 
 	await kv.set(["domains", uuid], [...filteredDomains, newDomain]);
 
-  return newDomain;
+	return newDomain;
 };
 
-export const confirmDomainSetup = async (uuid: string, domainName: string): Promise<Domain> => {
-  const res = await kv.get<Domain[]>(["domains", uuid]);
-  const domains = res.value;
-  if (!domains) {
-    throw new Error(`no domains found for uuid ${uuid}`);
-  }
-  const domain = domains.find((d) => d.name === domainName && d.verified);
+export const confirmDomainSetup = async (
+	uuid: string,
+	domainName: string,
+): Promise<Domain> => {
+	const res = await kv.get<Domain[]>(["domains", uuid]);
+	const domains = res.value;
+	if (!domains) {
+		throw new Error(`no domains found for uuid ${uuid}`);
+	}
+	const domain = domains.find((d) => d.name === domainName && d.verified);
 
-  if (!domain) {
-    throw new Error(`domain ${domainName} is not verified or does not exist`);
-  }
+	if (!domain) {
+		throw new Error(`domain ${domainName} is not verified or does not exist`);
+	}
 
-  const filteredDomains = domains.filter((d) => d.name !== domainName);
+	const filteredDomains = domains.filter((d) => d.name !== domainName);
 
-  const newDomain: Domain = {
-    ...domain,
-    setup: true,
-  };
+	const newDomain: Domain = {
+		...domain,
+		setup: true,
+	};
 
-  await kv.set(["domains", uuid], [...filteredDomains, newDomain]);
+	await kv.set(["domains", uuid], [...filteredDomains, newDomain]);
 
-  return newDomain;
+	return newDomain;
 };
-
 
 export const removeDomain = async (
 	uuid: string,

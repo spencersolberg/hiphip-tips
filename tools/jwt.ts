@@ -1,6 +1,8 @@
 import * as jose from "jose";
 
-const { publicKey, privateKey } = await jose.generateKeyPair("RS256", { extractable: true });
+const { publicKey, privateKey } = await jose.generateKeyPair("RS256", {
+	extractable: true,
+});
 
 const publicKeyString = await jose.exportSPKI(publicKey);
 const privateKeyString = await jose.exportPKCS8(privateKey);
@@ -12,17 +14,17 @@ const publicJWK = await jose.exportJWK(publicKey);
 // console.log(publicJWK);
 
 const jwks = {
-  keys: [
-    {
-      ...publicJWK,
-      use: "sig",
-      // generate UUID for kid
-      kid: crypto.randomUUID(),
-      alg: "RS256",
-      "key_ops": ["verify"]
-    }
-  ]
-}
+	keys: [
+		{
+			...publicJWK,
+			use: "sig",
+			// generate UUID for kid
+			kid: crypto.randomUUID(),
+			alg: "RS256",
+			key_ops: ["verify"],
+		},
+	],
+};
 
 // console.log(jwks);
 

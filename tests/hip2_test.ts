@@ -25,33 +25,33 @@ import { getSymbols, getAddress, isHandshake } from "../utils/hip2.ts";
 // });
 
 Deno.test("Successful handshake symbols", async () => {
-  const name = "spencersolberg";
-  const symbols = await getSymbols(name, "handshake");
+	const name = "spencersolberg";
+	const symbols = await getSymbols(name, "handshake");
 
-  assertEquals(symbols, ["HNS", "BTC"]);
+	assertEquals(symbols, ["HNS", "BTC"]);
 });
 
 Deno.test("Successful handshake address", async () => {
-  const name = "spencersolberg";
-  const symbol = "HNS";
-  const address = await getAddress(name, symbol, "handshake");
+	const name = "spencersolberg";
+	const symbol = "HNS";
+	const address = await getAddress(name, symbol, "handshake");
 
-  assertEquals(address, "hs1qqsc065xcsh68nt25h4vsmgx7vcyrwtajlhlxlc");
+	assertEquals(address, "hs1qqsc065xcsh68nt25h4vsmgx7vcyrwtajlhlxlc");
 });
 
 Deno.test("Unsuccessful handshake symbols", async () => {
-  const name = "spencersolberg.com";
-  const symbols = await getSymbols(name, "handshake");
+	const name = "spencersolberg.com";
+	const symbols = await getSymbols(name, "handshake");
 
-  assertEquals(symbols, []);
+	assertEquals(symbols, []);
 });
 
 Deno.test("Unsuccessful handshake address", async () => {
-  const name = "spencersolberg.com";
-  const symbol = "HNS";
-  const address = await getAddress(name, symbol, "handshake");
+	const name = "spencersolberg.com";
+	const symbol = "HNS";
+	const address = await getAddress(name, symbol, "handshake");
 
-  assertEquals(address, undefined);
+	assertEquals(address, undefined);
 });
 
 // Deno.test("Successful DANE symbols", async () => {
@@ -85,33 +85,33 @@ Deno.test("Unsuccessful handshake address", async () => {
 // })
 
 Deno.test("Successful CA symbols", async () => {
-  const name = "spencersolberg.com";
-  const symbols = await getSymbols(name, "ca");
+	const name = "spencersolberg.com";
+	const symbols = await getSymbols(name, "ca");
 
-  assertEquals(symbols, ["HNS", "BTC"]);
+	assertEquals(symbols, ["HNS", "BTC"]);
 });
 
 Deno.test("Successful CA address", async () => {
-  const name = "spencersolberg.com";
-  const symbol = "HNS";
-  const address = await getAddress(name, symbol, "ca");
+	const name = "spencersolberg.com";
+	const symbol = "HNS";
+	const address = await getAddress(name, symbol, "ca");
 
-  assertEquals(address, "hs1qqsc065xcsh68nt25h4vsmgx7vcyrwtajlhlxlc");
+	assertEquals(address, "hs1qqsc065xcsh68nt25h4vsmgx7vcyrwtajlhlxlc");
 });
 
 Deno.test("Unsuccessful CA symbols", async () => {
-  const name = "solberg.freeshell.org";
-  const symbols = await getSymbols(name, "ca");
+	const name = "solberg.freeshell.org";
+	const symbols = await getSymbols(name, "ca");
 
-  assertEquals(symbols, []);
+	assertEquals(symbols, []);
 });
 
 Deno.test("Unsuccessful CA address", async () => {
-  const name = "solberg.freeshell.org";
-  const symbol = "HNS";
-  const address = await getAddress(name, symbol, "ca");
+	const name = "solberg.freeshell.org";
+	const symbol = "HNS";
+	const address = await getAddress(name, symbol, "ca");
 
-  assertEquals(address, undefined);
+	assertEquals(address, undefined);
 });
 
 // Deno.test("Get address", async () => {
@@ -123,13 +123,13 @@ Deno.test("Unsuccessful CA address", async () => {
 // })
 
 Deno.test("Is Handshake", () => {
-  const name = "spencersolberg";
-  const isHandshakeName = isHandshake(name);
+	const name = "spencersolberg";
+	const isHandshakeName = isHandshake(name);
 
-  assertEquals(isHandshakeName, true);
+	assertEquals(isHandshakeName, true);
 
-  const name2 = "spencersolberg.com";
-  const isHandshakeName2 = isHandshake(name2);
+	const name2 = "spencersolberg.com";
+	const isHandshakeName2 = isHandshake(name2);
 
-  assertEquals(isHandshakeName2, false);
-})
+	assertEquals(isHandshakeName2, false);
+});

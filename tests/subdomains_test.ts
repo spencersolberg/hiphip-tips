@@ -16,7 +16,7 @@ import type { Subdomain } from "../utils/subdomains.ts";
 //   assertEquals(res.value?.key, key);
 
 //   kv.close();
-  
+
 //   // delete subdomain with incorrect key
 //   const incorrectKey = "1234567890123456";
 //   await deleteSubdomain(subdomain, incorrectKey).catch((err) => {
@@ -40,7 +40,7 @@ import type { Subdomain } from "../utils/subdomains.ts";
 //   assertEquals(res3.value, null);
 
 //   kv.close();
-  
+
 //   const resources = Deno.resources();
 //   // { 0: "stdin", 1: "stdout", 2: "stderr", 3: "fsFile" } etc.
 

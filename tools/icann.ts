@@ -5,6 +5,6 @@ const icannTLDList = await fetch(icannTLDListURL).then((res) => res.text());
 const icannTLDs = icannTLDList.split("\n").slice(1, -1);
 
 await Deno.writeTextFile(
-  "./icannTLDs.json",
-  JSON.stringify(icannTLDs, null, 4),
-)
+	"./icannTLDs.json",
+	JSON.stringify(icannTLDs, null, 4),
+);
