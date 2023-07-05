@@ -17,14 +17,17 @@ export const getRecords = async (domain: string): Promise<DNSRecord[]> => {
 
   const outputs = await Promise.all([ nsCmd.output(), dsCmd.output() ]);
 
+  const nsData = new TextDecoder().decode(outputs[0].stdout).trim().split("\n")[0];
+  const dsData = new TextDecoder().decode(outputs[1].stdout).trim().split("\n")[0].toLowerCase().replace(/ (?!.* )/,'');
+
   const records: DNSRecord[] = [
     {
       type: "NS",
-      data: new TextDecoder().decode(outputs[0].stdout).trim().split("\n")[0]
+      data: nsData
     },
     {
       type: "DS",
-      data: new TextDecoder().decode(outputs[1].stdout).trim().split("\n")[0].toLowerCase()
+      data: dsData
     }
   ]
 
