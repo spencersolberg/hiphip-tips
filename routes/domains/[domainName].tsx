@@ -145,12 +145,12 @@ export const handler: Handlers = {
 							}
 
 							try {
-								await confirmDomainSetup(uuid, domainName.toLowerCase());
+								const newDomain = await confirmDomainSetup(uuid, domainName.toLowerCase());
+								return ctx.render({ subdomain, domain: newDomain })
 							} catch (err) {
 								return ctx.render({ subdomain, domain, error: err.message });
 							}
 
-							return ctx.render({ subdomain, domain });
 						}
 						default: {
 							return ctx.render({ subdomain, domain });

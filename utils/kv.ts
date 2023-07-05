@@ -538,7 +538,7 @@ export const verifyDomainWithSignature = async (
   return newDomain;
 };
 
-export const confirmDomainSetup = async (uuid: string, domainName: string): Promise<void> => {
+export const confirmDomainSetup = async (uuid: string, domainName: string): Promise<Domain> => {
   const res = await kv.get<Domain[]>(["domains", uuid]);
   const domains = res.value;
   if (!domains) {
@@ -558,6 +558,8 @@ export const confirmDomainSetup = async (uuid: string, domainName: string): Prom
   };
 
   await kv.set(["domains", uuid], [...filteredDomains, newDomain]);
+
+  return newDomain;
 };
 
 
