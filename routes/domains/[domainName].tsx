@@ -5,6 +5,7 @@ import {
 	getSubdomain,
 	removeDomain,
 	verifyDomainWithSignature,
+	verifyDomainWithRecord,
 	confirmDomainSetup,
 } from "../../utils/kv.ts";
 import { getRecords, compareRecords } from "../../utils/dns.ts";
@@ -111,6 +112,18 @@ export const handler: Handlers = {
 							);
 
 							return ctx.render({ subdomain, domain: verifiedDomain });
+						}
+						case "verifyRecord": {
+							try {
+								const verifiedDomain = await verifyDomainWithRecord(uuid, domainName.toLowerCase());
+								return ctx.render({ subdomain, domain: verifiedDomain });
+							} catch (error) {
+								return ctx.render({
+									subdomain,
+									domain,
+									error: error.message,
+								});
+							}
 						}
 						case "removeDomain": {
 							await removeDomain(uuid, domainName.toLowerCase());
@@ -223,6 +236,49 @@ export default function DomainName({ data }: PageProps<Data>) {
 							/>
 						</>
 					)}
+					{!domain.verified && (
+						<>
+							<h2 class="text-3xl font-bold mt-4">verification - dns</h2>
+							<p>
+								you can verify this domain by adding the following TXT record to
+								your handshake domain
+							</p>
+							<table>
+								<thead>
+									<tr>
+										<th>type</th>
+										<th>name</th>
+										<th>content</th>
+									</tr>
+								</thead>
+								<tbody>
+									
+										<tr class="border-1 border-white">
+											<td class="border-1 border-white px-2 w-16">
+												<p class="text-center">{domain.verificationRecord.type}</p>
+											</td>
+											<td class="border-1 border-white px-2 w-16">
+												<p class="text-center">{domain.name}</p>
+											</td>
+											<td class="break-all border-1 border-white px-2">
+												<p class="text-center">{domain.verificationRecord.data}</p>
+											</td>
+										</tr>
+
+								</tbody>
+							</table>
+							<form method="post">
+								<button
+									class="w-full max-w-domain text-xl mt-4 text-center underline hover:italic"
+									type="submit"
+									value="verifyRecord"
+									name="submit"
+								>
+									<p>check records now</p>
+								</button>
+							</form>
+						</>
+					)}
 					{domain.verified && !domain.setup && domain.setupRecords && (
 						<>
 							<h2 class="text-3xl font-bold mt-4">setup</h2>
@@ -233,20 +289,20 @@ export default function DomainName({ data }: PageProps<Data>) {
 							<table>
 								<thead>
 									<tr>
-										{/* <th>name</th> */}
 										<th>type</th>
+										<th>name</th>
 										<th>data</th>
 									</tr>
 								</thead>
 								<tbody>
 									{domain.setupRecords.map((record) => (
 										<tr class="border-1 border-white">
-											{/* <td class="border-1 border-white px-2 w-16">
-                        <p class="text-center">@</p>
-                      </td> */}
 											<td class="border-1 border-white px-2 w-16">
 												<p class="text-center">{record.type}</p>
 											</td>
+											<td class="border-1 border-white px-2 w-16">
+                        <p class="text-center">{domain.name}</p>
+                      </td>
 											<td class="break-all border-1 border-white px-2">
 												<p class="text-center">{record.data}</p>
 											</td>

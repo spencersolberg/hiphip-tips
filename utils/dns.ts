@@ -55,3 +55,43 @@ export const compareRecords = (
 
 	return true;
 };
+
+export const getTxtRecord = async (domain: string): Promise<DNSRecord> => {
+	const { HNSD_HOST, HNSD_PORT, HANDSHAKE_DOMAIN } = Deno.env.toObject();
+
+	const args = [
+		`@${HNSD_HOST}`,
+		"-p",
+		`${HNSD_PORT}`,
+		"+dnssec",
+		"+short",
+		domain,
+		"TXT",
+	];
+
+	const cmd = new Deno.Command("dig", { args });
+
+	const output = await cmd.output();
+
+	const txtDatas = new TextDecoder()
+		.decode(output.stdout)
+		.trim()
+		.split("\n")
+		.map((txtData) => txtData.replace(/"/g, ""));
+
+	// find the TXT record that starts with ${HANDSHAKE_DOMAIN}=
+	const txtData = txtDatas.find((txtData) =>
+		txtData.startsWith(`${HANDSHAKE_DOMAIN}=`),
+	);
+
+	if (!txtData) {
+		throw new Error("TXT record not found");
+	}
+
+	const record: DNSRecord = {
+		type: "TXT",
+		data: txtData,
+	};
+
+	return record;
+};

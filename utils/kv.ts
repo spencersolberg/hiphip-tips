@@ -8,6 +8,7 @@ import {
 import { isHandshake } from "./hip2.ts";
 import { verifyMessage } from "./hsd.ts";
 import { createZone, deleteZone } from "./pdns.ts";
+import { getTxtRecord } from "./dns.ts";
 
 export interface Subdomain {
 	uuid: string;
@@ -408,20 +409,26 @@ export const validateDomain = async (
 	if (!isHandshake(domain)) {
 		throw new Error("only Handshake domains are supported right now");
 	}
-	// if domain is not TLD, throw error
-	if (domain.split(".").length > 1) {
-		throw new Error("only TLDs are supported right now");
-	}
+	// // if domain is not TLD, throw error
+	// if (domain.split(".").length > 1) {
+	// 	throw new Error("only TLDs are supported right now");
+	// }
+
+  let signable = true;
+
+  if (domain.split(".").length > 1) {
+    signable = false;
+  }
 
 	// if domain longer than 63 characters, throw error
 	if (domain.length > 63) {
 		throw new Error("domain too long");
 	}
 
-	// if domain has characters other than a-z, -, or 0-9, throw error
-	if (!/^[a-z0-9-]+$/.test(domain)) {
-		throw new Error("domain contains invalid characters");
-	}
+// if domain has characters other than a-z, -, 0-9, or ., throw error
+if (!/^[a-z0-9-.]+$/.test(domain)) {
+  throw new Error("domain contains invalid characters");
+}
 
 	// if domain already exists in ["domains", uuid], throw error
 	const res = await kv.get<Domain[]>(["domains", uuid]);
@@ -453,11 +460,11 @@ export const validateDomain = async (
 		verified: false,
 		setup: false,
 		type: "handshake",
-		signable: true,
+		signable,
 		message: `${Deno.env.get("HANDSHAKE_DOMAIN")}/ ${uuid}`,
 		verificationRecord: {
 			type: "TXT",
-			data: `${Deno.env.get("HANDSHAKE_DOMAIN")}/ ${uuid}`,
+			data: `${Deno.env.get("HANDSHAKE_DOMAIN")}=${uuid}`,
 		},
 	};
 
@@ -535,6 +542,49 @@ export const verifyDomainWithSignature = async (
 
 	return newDomain;
 };
+
+export const verifyDomainWithRecord = async (uuid: string, domainName: string): Promise<Domain> => {
+  const res = await kv.get<Domain[]>(["domains", uuid]);
+  const domains = res.value;
+  if (!domains) {
+    throw new Error(`no domains found for uuid ${uuid}`);
+  }
+
+  const domain = domains.find((d) => d.name === domainName && !d.verified);
+
+  if (!domain) {
+    throw new Error(
+      `domain ${domainName} is already verified or does not exist`,
+    );
+  }
+
+  const currentRecord = await getTxtRecord(domainName);
+
+  if (!currentRecord) {
+    throw new Error("no TXT record found");
+  }
+
+  const verified = currentRecord.data === domain.verificationRecord.data;
+
+  if (!verified) {
+    throw new Error(`invalid TXT record: ${currentRecord.data}`);
+  }
+
+  const filteredDomains = domains.filter((d) => d.name !== domainName);
+
+  const setupRecords = await createZone(domainName);
+
+  const newDomain: Domain = {
+    ...domain,
+    verified,
+    setupRecords,
+  };
+
+  await kv.set(["domains", uuid], [...filteredDomains, newDomain]);
+
+  return newDomain;
+
+}
 
 export const confirmDomainSetup = async (
 	uuid: string,
