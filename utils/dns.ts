@@ -1,6 +1,6 @@
 import type { DNSRecord } from "./kv.ts";
 
-export const getRecords = async (domain: string): Promise<DNSRecord[]> => {
+export const getNameserverRecords = async (domain: string): Promise<DNSRecord[]> => {
 	const { HNSD_HOST, HNSD_PORT } = Deno.env.toObject();
 
 	const args = [
@@ -41,6 +41,54 @@ export const getRecords = async (domain: string): Promise<DNSRecord[]> => {
 
 	return records;
 };
+
+export const getIpRecords = async (domain: string): Promise<DNSRecord[]> => {
+	const { HNSD_HOST, HNSD_PORT } = Deno.env.toObject();
+
+	const args = [
+		`@${HNSD_HOST}`,
+		"-p",
+		`${HNSD_PORT}`,
+		"+dnssec",
+		"+short",
+	];
+
+	const aCmd = new Deno.Command("dig", { args: [...args, domain, "A"] });
+	const tlsaCmd = new Deno.Command("dig", { args: [...args, `_443._tcp.${domain}`, "TLSA"] });
+
+	const outputs = await Promise.all([aCmd.output(), tlsaCmd.output()]);
+	const aData = new TextDecoder()
+		.decode(outputs[0].stdout)
+		.trim()
+		.split("\n")[0];
+	const tlsaData = new TextDecoder()
+		.decode(outputs[1].stdout)
+		.trim()
+		.split("\n")[0]
+		.replace(/ (?!.* )/, "");
+
+	const records: DNSRecord[] = [
+		{
+			type: "A",
+			data: aData,
+		},
+		{
+			type: "TLSA",
+			data: tlsaData,
+		},
+	];
+
+	// console.error stderrs
+
+	for (const output of outputs) {
+		const error = new TextDecoder().decode(output.stderr).trim();
+		if (error) {
+			console.error(error);
+		}
+	}
+
+	return records;
+}
 
 export const compareRecords = (
 	first: DNSRecord[],
