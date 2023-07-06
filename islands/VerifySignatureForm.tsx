@@ -17,10 +17,11 @@ interface wallet {
 interface Props {
 	name: string;
 	message: string;
+	handshake: boolean;
 }
 
 export default function VerifySignatureForm(props: Props) {
-	const { name, message } = props;
+	const { name, message, handshake } = props;
 
 	const [signature, setSignature] = useState<string>("");
 	const [bob3, setBob3] = useState<Window["bob3"] | undefined>();
@@ -78,17 +79,28 @@ export default function VerifySignatureForm(props: Props) {
 						class="rounded-md w-full text-3xl px-4 pb-1 pt-0.5 text-center border-2 border-black mt-6 -mb-4 bg-blue-400 transition-transform transform-gpu md:motion-safe:hover:scale-110 flex"
 						onClick={signWithBob}
 					>
-						Sign with Bob
 						<img
 							src="https://raw.githubusercontent.com/kyokan/bob-wallet/master/resources/icons/1024x1024.png"
-							class="w-8 pt-1 ml-2"
+							class="w-8 pt-1 mr-2"
 							alt="bob logo"
 						/>
+						Sign with Bob
 					</button>
 				)}
+				<a href={`https://shakestation${handshake ? "" : ".io"}/manage/${name}`} target="_blank" rel="noopener noreferrer"
+				class="rounded-md w-full text-2xl px-4 pb-1 pt-0.5 text-center border-2 border-black mt-6 -mb-4 text-black transition-tranform transform-gpu md:motion-safe:hover:scale-110 flex"
+				style="background-color: #94f9c3;">
+					<img
+						src="https://shakestation.io/assets/img/logo"
+						class="w-8 h-8 pt-1 mr-2"
+						alt="shakestation logo"
+					/>
+					Sign with ShakeStation
+					</a>
+
 				<input
 					type="text"
-					class="rounded-md w-full text-black text-2xl px-4 pb-1 pt-0.5 mt-8 border-2 border-black text-left"
+					class="rounded-md w-full text-black text-2xl px-4 pb-1 pt-0.5 mt-6 border-2 border-black text-left"
 					placeholder="signature"
 					name="signature"
 					value={signature}

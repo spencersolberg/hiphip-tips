@@ -9,6 +9,7 @@ import {
 	confirmDomainSetup,
 } from "../../utils/kv.ts";
 import { getRecords, compareRecords } from "../../utils/dns.ts";
+import { isHandshake } from "../../utils/hip2.ts";
 
 import { Head } from "$fresh/runtime.ts";
 import Style from "../../components/Style.tsx";
@@ -23,6 +24,7 @@ interface Data {
 	domain: Domain;
 	subdomain: string;
 	error?: string;
+	handshake: boolean;
 }
 
 export const handler: Handlers = {
@@ -30,6 +32,11 @@ export const handler: Handlers = {
 		const { headers } = req;
 		const cookie = headers.get("cookie");
 		const token = cookie?.split("token=")[1]?.split(";")[0];
+
+		const url = new URL(req.url);
+		const host = url.hostname;
+
+		const handshake = isHandshake(host);
 
 		if (!token) {
 			return new Response(null, {
@@ -49,7 +56,7 @@ export const handler: Handlers = {
 
 				const domain = await getDomain(uuid, domainName.toLowerCase());
 
-				return ctx.render({ domain, subdomain });
+				return ctx.render({ domain, subdomain, handshake });
 			} catch (_) {
 				return new Response(null, {
 					status: 302,
@@ -71,6 +78,11 @@ export const handler: Handlers = {
 		const { headers } = req;
 		const cookie = headers.get("cookie");
 		const token = cookie?.split("token=")[1]?.split(";")[0];
+
+		const url = new URL(req.url);
+		const host = url.hostname;
+
+		const handshake = isHandshake(host);
 
 		if (!token) {
 			return new Response(null, {
@@ -102,6 +114,7 @@ export const handler: Handlers = {
 									domain,
 									subdomain,
 									error: "signature required",
+									handshake
 								});
 							}
 
@@ -111,12 +124,12 @@ export const handler: Handlers = {
 								signature,
 							);
 
-							return ctx.render({ subdomain, domain: verifiedDomain });
+							return ctx.render({ subdomain, domain: verifiedDomain, handshake });
 						}
 						case "verifyRecord": {
 							try {
 								const verifiedDomain = await verifyDomainWithRecord(uuid, domainName.toLowerCase());
-								return ctx.render({ subdomain, domain: verifiedDomain });
+								return ctx.render({ subdomain, domain: verifiedDomain, handshake });
 							} catch (error) {
 								return ctx.render({
 									subdomain,
@@ -140,6 +153,7 @@ export const handler: Handlers = {
 								return ctx.render({
 									subdomain,
 									domain,
+									handshake,
 									error: "no setup records",
 								});
 							}
@@ -149,6 +163,7 @@ export const handler: Handlers = {
 								return ctx.render({
 									subdomain,
 									domain,
+									handshake,
 									error: `records do not match: ${JSON.stringify(
 										currentRecords,
 										undefined,
@@ -162,17 +177,17 @@ export const handler: Handlers = {
 									uuid,
 									domainName.toLowerCase(),
 								);
-								return ctx.render({ subdomain, domain: newDomain });
+								return ctx.render({ subdomain, domain: newDomain, handshake });
 							} catch (err) {
-								return ctx.render({ subdomain, domain, error: err.message });
+								return ctx.render({ subdomain, domain, error: err.message, handshake });
 							}
 						}
 						default: {
-							return ctx.render({ subdomain, domain });
+							return ctx.render({ subdomain, domain, handshake });
 						}
 					}
 				} catch (err) {
-					return ctx.render({ subdomain, domain, error: err.message });
+					return ctx.render({ subdomain, domain, error: err.message, handshake });
 				}
 			} catch (_) {
 				return new Response(null, {
@@ -194,7 +209,7 @@ export const handler: Handlers = {
 };
 
 export default function DomainName({ data }: PageProps<Data>) {
-	const { domain, subdomain, error } = data;
+	const { domain, subdomain, error, handshake } = data;
 
 	return (
 		<>
@@ -233,6 +248,7 @@ export default function DomainName({ data }: PageProps<Data>) {
 							<VerifySignatureForm
 								name={domain.name}
 								message={domain.message}
+								handshake={handshake}
 							/>
 						</>
 					)}
