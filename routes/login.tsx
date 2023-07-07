@@ -4,45 +4,27 @@ import Header from "../components/Header.tsx";
 import Footer from "../components/Footer.tsx";
 import { getSubdomain } from "../utils/subdomains.ts";
 import LogInForm from "../islands/LogInForm.tsx";
+import { isHandshake } from "../utils/hip2.ts";
 
 import { Handlers, PageProps } from "$fresh/server.ts";
 
 interface Data {
 	error?: string;
+	handshake: boolean;
 }
 
 export const handler: Handlers = {
-	async GET(_, ctx) {
-		return await ctx.render();
-	},
-	async POST(req, ctx) {
-		const form = await req.formData();
-		const key = form.get("key") as string;
-		if (key) {
-			try {
-				const subdomain = await getSubdomain(key);
-				const reqURL = new URL(req.url);
-				const domain = reqURL.hostname;
-				const headers = new Headers();
-				headers.set("Location", "/");
-				headers.set(
-					"Set-Cookie",
-					`key=${key}; Path=/; HttpOnly; Secure; SameSite=Strict; Domain=.${domain};`,
-				);
-				return new Response(null, {
-					status: 303,
-					headers,
-				});
-			} catch (error) {
-				return ctx.render({ error: error.message });
-			}
-		}
-		return ctx.render();
+	async GET(req, ctx) {
+		const url = new URL(req.url);
+		const domain = url.hostname;
+		const handshake = isHandshake(domain);
+		return await ctx.render({ handshake });
 	},
 };
 
 export default function Login({ data }: PageProps<Data>) {
-	const { error } = data ?? {};
+	const { error, handshake } = data ?? {};
+	const { HANDSHAKE_DOMAIN, ICANN_DOMAIN } = Deno.env.toObject();
 	return (
 		<>
 			<Head>
@@ -61,8 +43,21 @@ export default function Login({ data }: PageProps<Data>) {
 			<div class="p-4 mx-auto flex max-w-screen-xl flex-col text-white min-h-screen">
 				<Header />
 				<LogInForm>
-					<>{Deno.env.get("HANDSHAKE_DOMAIN")}</>
+					<>{HANDSHAKE_DOMAIN}</>
 				</LogInForm>
+				<a
+					href={
+						handshake
+							? `https://${ICANN_DOMAIN}/sync`
+							: `https://${HANDSHAKE_DOMAIN}/sync`
+					}
+					class="text-center text-xl mt-4 hover:underline hover:italic"
+				>
+					<p>
+						alreay signed in on {handshake ? ICANN_DOMAIN : HANDSHAKE_DOMAIN}?
+						<p>click here to sync</p>
+					</p>
+				</a>
 				<Footer />
 			</div>
 		</>
